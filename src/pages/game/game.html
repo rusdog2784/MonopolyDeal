@@ -8,20 +8,51 @@
 </ion-header>
 
 <ion-content padding>
-    <h3>Main Game Page</h3>
-    <button ion-button>Start Turn</button>
-    <button ion-button>View Hand</button>
-    <button ion-button (click)="endTurn()">End Turn</button>
-    <button ion-button (click)="pull2Cards()">Pick Up Cards</button>
-    <div class="deck-count">
-        <p>Deck Count: {{deck.cards.length}}</p>
+    <div class="online-players">
+        <ol>
+            <li *ngFor="let player of players">
+                <div class="profile-pic">
+                    <img src="assets/imgs/logo.png" width="55px" height="55px">
+                </div>
+                <div class="player-name">{{player.name}}</div>
+                <div class="player-worth">${{player.value}}M</div>
+            </li>
+        </ol>
+    </div>
+    <div class="decks">
+        <div class="decks-wrapper">
+            <div class="played">
+                <img src="{{playedCards[playedCards.length - 1].imageLocation}}" width="65px" height="105px">
+            </div>
+            <div class="pick-up">
+                <img src="assets/imgs/deck_of_cards.png" width="65px" height="105px">
+            </div>
+        </div>
+    </div>
+    <div class="active-cards">
+        <div class="left-side">
+            <p>Property Cards Go Here</p>
+        </div>
+        <div class="right-side">
+            <p>Money Cards Go Here</p>
+        </div>
     </div>
     <div class="player-hand">
         <ul>
-            <li *ngFor="let card of players[0].cards" (click)="playerCardTouched(card)">
+            <li *ngFor="let card of players[0].hand" (click)="presentCardOptions($event, card)">
                 <img src="{{card.imageLocation}}">
             </li>
         </ul>
     </div>
+
+    <!--
+    <div class="deck-count">
+        <p>Deck Count: {{deck.cards.length}}</p>
+    </div>
+    <button ion-button>Start Turn</button>
+    <button ion-button>View Hand</button>
+    <button ion-button (click)="endTurn()">End Turn</button>
+    <button ion-button (click)="pull2Cards()">Pick Up Cards</button>
+    -->
 </ion-content>
   

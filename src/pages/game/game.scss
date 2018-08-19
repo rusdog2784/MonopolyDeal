@@ -1,4 +1,60 @@
 page-game {
+    .online-players {
+        width: 100%;
+        height: 100px;
+        text-align: center;
+        border-bottom: 1px solid black;
+    }
+
+    .online-players ol {
+        list-style: none;
+        display: inline-flex;
+        text-align: center;
+        margin: 0 auto;
+        padding: 0px;
+    }
+
+    .online-players li {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .decks {
+        width: 100%;
+        height: 125px;
+        display: inline-flex;
+        margin-top: 16px;
+        margin-bottom: 16px;
+    }
+
+    .decks-wrapper {
+        display: inline-flex;
+        margin: 0 auto;
+    }
+
+    .decks-wrapper .played {
+        margin-right: 5px;
+    }
+
+    .decks-wrapper .pick-up {
+        margin-left: 5px;
+    }
+
+    .active-cards {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .active-cards .left-side {
+        width: 50%;
+        float: left;
+    }
+
+    .active-cards .right-side {
+        width: 50%;
+        float: left;
+    }
+
     .player-hand {
         position: fixed;
         width: 100%;

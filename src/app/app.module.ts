@@ -6,6 +6,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { GamePage } from '../pages/game/game';
+import { CardPopover } from '../pages/card_popover/card_popover';
 /*
 import { ActionCard } from './models/ActionCard';
 import { Card } from './models/Card';
@@ -26,7 +27,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     MyApp,
     HomePage,
     ListPage,
-    GamePage
+    GamePage,
+    CardPopover
   ],
   imports: [
     BrowserModule,
@@ -37,7 +39,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     MyApp,
     HomePage,
     ListPage,
-    GamePage
+    GamePage,
+    CardPopover
   ],
   providers: [
     StatusBar,

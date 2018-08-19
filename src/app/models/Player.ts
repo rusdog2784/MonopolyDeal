@@ -2,10 +2,18 @@ import { Card } from "./Card";
 
 export class Player {
     name: string;
-    cards: Card[];
+    value: number;
+    hand: Card[];
+    money: Card[];
+    activeCards: Card[];
+    turnCount: number;
 
-    constructor(name: string) {
+    constructor(name: string, value: number) {
         this.name = name;
-        this.cards = [];
+        this.value = value;
+        this.hand = [];
+        this.money = [];
+        this.activeCards = [];
+        this.turnCount = 0;
     }
 }

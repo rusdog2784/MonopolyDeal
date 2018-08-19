@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController } from 'ionic-angular';
+import { NavController, AlertController, PopoverController } from 'ionic-angular';
 import { Deck } from '../../app/models/Deck';
 import { Card } from '../../app/models/Card';
 import { Player } from '../../app/models/Player';
+import { CardPopover } from '../card_popover/card_popover';
 
 @Component({
   selector: 'page-game',
@@ -13,41 +14,49 @@ export class GamePage {
     playedCards: Card[];
     players: Player[];
 
-    constructor(public navCtrl: NavController, public alertCtrl: AlertController) {
-        this.playedCards = [];
+    constructor(public navCtrl: NavController, public alertCtrl: AlertController, public popoverCtrl: PopoverController) {
         this.players = [];
         this.setupGame();
     }
 
     setupGame() {
         this.deck = new Deck();
-        console.log("[game.ts] Deck created! There are " + this.deck.cards.length + " cards.");
-        let player1 = new Player("Scott");
+        this.playedCards = [new Card("Played Cards", 0)];
+
+        let player1 = new Player("Scott", 0);
         for (var i = 0; i < 5; i++) {
-            player1.cards.push(this.deck.cards[0]);
+            player1.hand.push(this.deck.cards[0]);
             this.deck.cards.splice(0, 1);
         }
         this.players.push(player1);
         console.log("[game.ts] Player 1, " + player1.name + ", has been created.");
         console.log("[game.ts] Their hand contains:");
-        console.log(player1.cards);
+        console.log(player1.hand);
 
-        let player2 = new Player("Morgan");
+        let player2 = new Player("Morgan", 0);
         for (var i = 0; i < 5; i++) {
-            player2.cards.push(this.deck.cards[0]);
+            player2.hand.push(this.deck.cards[0]);
             this.deck.cards.splice(0, 1);
         }
         this.players.push(player2);
         console.log("[game.ts] Player 2, " + player2.name + ", has been created.");
         console.log("[game.ts] Their hand contains:");
-        console.log(player2.cards);
+        console.log(player2.hand);
 
         console.log(this.players);
     }
 
-    playerCardTouched(card: Card) {
+    presentCardOptions(ev, card: Card) {
         console.log("Player touched card:");
         console.log(card);
+        let popover = this.popoverCtrl.create(CardPopover, {
+            playedCards: this.playedCards,
+            player: this.players[0],
+            card: card
+        });
+        popover.present({
+            ev: ev
+        });
     }
 
     pull2Cards() {

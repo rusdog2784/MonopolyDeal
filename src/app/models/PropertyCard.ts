@@ -10,6 +10,7 @@ export class PropertyCard extends Card {
         this.type = type;
         var imageName = title.replace(" ", "");
         imageName = imageName.replace(" ", "");
+        imageName = imageName.replace(" ", "");
         this.imageLocation = "assets/imgs/property_cards/" + imageName + ".png";
     }
 }
