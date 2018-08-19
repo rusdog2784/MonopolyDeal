@@ -1,0 +1,27 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Home</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <h3>Main Game Page</h3>
+    <button ion-button>Start Turn</button>
+    <button ion-button>View Hand</button>
+    <button ion-button (click)="endTurn()">End Turn</button>
+    <button ion-button (click)="pull2Cards()">Pick Up Cards</button>
+    <div class="deck-count">
+        <p>Deck Count: {{deck.cards.length}}</p>
+    </div>
+    <div class="player-hand">
+        <ul>
+            <li *ngFor="let card of players[0].cards" (click)="playerCardTouched(card)">
+                <img src="{{card.imageLocation}}">
+            </li>
+        </ul>
+    </div>
+</ion-content>
+  

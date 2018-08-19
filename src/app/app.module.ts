@@ -5,6 +5,18 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
+import { GamePage } from '../pages/game/game';
+/*
+import { ActionCard } from './models/ActionCard';
+import { Card } from './models/Card';
+import { Deck } from './models/Deck';
+import { MoneyCard } from './models/MoneyCard';
+import { Player } from './models/Player';
+import { PropertyCard } from './models/PropertyCard';
+import { PropertyType } from './models/PropertyType';
+import { RentCard } from './models/RentCard';
+import { Wildcard } from './models/Wildcard';
+*/
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -13,17 +25,19 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   declarations: [
     MyApp,
     HomePage,
-    ListPage
+    ListPage,
+    GamePage
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     HomePage,
-    ListPage
+    ListPage,
+    GamePage
   ],
   providers: [
     StatusBar,
