@@ -61,13 +61,13 @@ export class GamePage {
 
     pull2Cards() {
         for (var i = 0; i < 2; i++) {
-            this.players[0].cards.push(this.deck.cards[0]);
+            this.players[0].hand.push(this.deck.cards[0]);
             this.deck.cards.splice(0, 1);
         }
     }
 
     endTurn() {
-        if (this.players[0].cards.length > 7) {
+        if (this.players[0].hand.length > 7) {
             const alert = this.alertCtrl.create({
                 title: 'Whoops!',
                 subTitle: 'You seem to have too many cards. Please select cards you want to discard.',
