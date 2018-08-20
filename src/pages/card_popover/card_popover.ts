@@ -1,8 +1,9 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavParams, ViewController } from 'ionic-angular';
-import { CardOptions } from '../../app/models/CardOptions';
 import { ActionCard } from '../../app/models/ActionCard';
 import { PropertyCard } from '../../app/models/PropertyCard';
+import { Card } from '../../app/models/Card';
+import { Player } from '../../app/models/Player';
 
 @Component({
     template: `
@@ -36,11 +37,12 @@ export class CardPopover {
         }
     }
 
-    takeAction(action: CardOptions) {
+    takeAction(action: string) {
+        var index: number;
         switch (action) {
             case 'PLAY':
                 console.log("Taking action: PLAY");
-                let index = this.player.hand.indexOf(this.card);
+                index = this.player.hand.indexOf(this.card);
                 this.player.hand.splice(index, 1);
                 if (this.card instanceof ActionCard) {
                     this.playedCards.push(this.card);
@@ -54,13 +56,13 @@ export class CardPopover {
                 let cardValue = this.card.value;
                 this.player.value += cardValue;
                 this.player.money.push(this.card);
-                let index = this.player.hand.indexOf(this.card);
+                index = this.player.hand.indexOf(this.card);
                 this.player.hand.splice(index, 1);
                 this.player.turnCount++;
                 break;
             case 'DISCARD':
                 console.log("Taking action: DISCARD");
-                let index = this.player.hand.indexOf(this.card);
+                index = this.player.hand.indexOf(this.card);
                 this.player.hand.splice(index, 1);
                 this.playedCards.push(this.card);
                 break;
