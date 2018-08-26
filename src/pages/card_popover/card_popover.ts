@@ -39,10 +39,11 @@ export class CardPopover {
     }
 
     takeAction(action: string) {
+        var index: number;
         switch (action) {
             case 'PLAY':
                 console.log("Taking action: PLAY");
-                let index = this.player.hand.indexOf(this.card);
+                index = this.player.hand.indexOf(this.card);
                 this.player.hand.splice(index, 1);
                 if (this.card instanceof ActionCard) {
                     this.playedCards.push(this.card);
@@ -56,13 +57,13 @@ export class CardPopover {
                 let cardValue = this.card.value;
                 this.player.value += cardValue;
                 this.player.money.push(this.card);
-                let index = this.player.hand.indexOf(this.card);
+                index = this.player.hand.indexOf(this.card);
                 this.player.hand.splice(index, 1);
                 this.player.turnCount++;
                 break;
             case 'DISCARD':
                 console.log("Taking action: DISCARD");
-                let index = this.player.hand.indexOf(this.card);
+                index = this.player.hand.indexOf(this.card);
                 this.player.hand.splice(index, 1);
                 this.playedCards.push(this.card);
                 break;
