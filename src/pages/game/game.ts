@@ -4,6 +4,7 @@ import { Deck } from '../../app/models/Deck';
 import { Card } from '../../app/models/Card';
 import { Player } from '../../app/models/Player';
 import { CardPopover } from '../card_popover/card_popover';
+import { Socket } from 'ng-socket-io';
 
 @Component({
   selector: 'page-game',
@@ -14,7 +15,7 @@ export class GamePage {
     playedCards: Card[];
     players: Player[];
 
-    constructor(public navCtrl: NavController, public alertCtrl: AlertController, public popoverCtrl: PopoverController) {
+    constructor(public navCtrl: NavController, public alertCtrl: AlertController, public popoverCtrl: PopoverController, private socket: Socket) {
         this.players = [];
         this.setupGame();
     }
@@ -23,7 +24,7 @@ export class GamePage {
         this.deck = new Deck();
         this.playedCards = [new Card("Played Cards", 0)];
 
-        let player1 = new Player("Scott", 0);
+        let player1 = new Player("Scott", "Russell", 0);
         for (var i = 0; i < 5; i++) {
             player1.hand.push(this.deck.cards[0]);
             this.deck.cards.splice(0, 1);
@@ -33,7 +34,7 @@ export class GamePage {
         console.log("[game.ts] Their hand contains:");
         console.log(player1.hand);
 
-        let player2 = new Player("Morgan", 0);
+        let player2 = new Player("Morgan", "Lynn", 0);
         for (var i = 0; i < 5; i++) {
             player2.hand.push(this.deck.cards[0]);
             this.deck.cards.splice(0, 1);

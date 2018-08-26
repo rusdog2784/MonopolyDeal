@@ -1,15 +1,17 @@
 import { Card } from "./Card";
 
 export class Player {
-    name: string;
+    firstName: string;
+    lastName: string;
     value: number;
     hand: Card[];
     money: Card[];
     activeCards: Card[];
     turnCount: number;
 
-    constructor(name: string, value: number) {
-        this.name = name;
+    constructor(firstName: string, lastName: string, value: number) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.value = value;
         this.hand = [];
         this.money = [];

@@ -1,8 +1,10 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavParams, ViewController } from 'ionic-angular';
-import { CardOptions } from '../../app/models/CardOptions';
+//import { CardOptions } from '../../app/models/CardOptions';
 import { ActionCard } from '../../app/models/ActionCard';
 import { PropertyCard } from '../../app/models/PropertyCard';
+import { Card } from '../../app/models/Card';
+import { Player } from '../../app/models/Player';
 
 @Component({
     template: `
@@ -36,7 +38,7 @@ export class CardPopover {
         }
     }
 
-    takeAction(action: CardOptions) {
+    takeAction(action: string) {
         switch (action) {
             case 'PLAY':
                 console.log("Taking action: PLAY");
