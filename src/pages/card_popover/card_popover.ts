@@ -5,6 +5,7 @@ import { ActionCard } from '../../app/models/ActionCard';
 import { PropertyCard } from '../../app/models/PropertyCard';
 import { Card } from '../../app/models/Card';
 import { Player } from '../../app/models/Player';
+import { MoneyCard } from '../../app/models/MoneyCard';
 
 @Component({
     template: `
@@ -49,6 +50,11 @@ export class CardPopover {
                     this.playedCards.push(this.card);
                 } else if (this.card instanceof PropertyCard) {
                     this.player.activeCards.push(this.card);
+                } else if (this.card instanceof MoneyCard) {
+                    let cardValue = this.card.value;
+                    this.player.value += cardValue;
+                    this.player.moneyCards.push(this.card);
+                    this.player.organizeMoneyCards();
                 }
                 this.player.turnCount++;
                 break;
@@ -56,7 +62,8 @@ export class CardPopover {
                 console.log("Taking action: MONETIZE");
                 let cardValue = this.card.value;
                 this.player.value += cardValue;
-                this.player.money.push(this.card);
+                this.player.moneyCards.push(this.card);
+                this.player.organizeMoneyCards();
                 index = this.player.hand.indexOf(this.card);
                 this.player.hand.splice(index, 1);
                 this.player.turnCount++;

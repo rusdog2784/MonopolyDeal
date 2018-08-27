@@ -30,7 +30,7 @@ export class GamePage {
             this.deck.cards.splice(0, 1);
         }
         this.players.push(player1);
-        console.log("[game.ts] Player 1, " + player1.name + ", has been created.");
+        console.log("[game.ts] Player 1, " + player1.firstName + ", has been created.");
         console.log("[game.ts] Their hand contains:");
         console.log(player1.hand);
 
@@ -40,7 +40,7 @@ export class GamePage {
             this.deck.cards.splice(0, 1);
         }
         this.players.push(player2);
-        console.log("[game.ts] Player 2, " + player2.name + ", has been created.");
+        console.log("[game.ts] Player 2, " + player2.firstName + ", has been created.");
         console.log("[game.ts] Their hand contains:");
         console.log(player2.hand);
 

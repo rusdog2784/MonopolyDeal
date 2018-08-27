@@ -43,16 +43,25 @@ page-game {
     .active-cards {
         width: 100%;
         margin: 0 auto;
+        height: 35%;
     }
 
     .active-cards .left-side {
         width: 50%;
         float: left;
+        height: 100%;
+        overflow: scroll;
     }
 
     .active-cards .right-side {
         width: 50%;
         float: left;
+        height: 100%;
+        overflow: scroll;
+    }
+
+    .active-cards ul {
+        list-style: none;
     }
 
     .player-hand {

@@ -4,6 +4,7 @@
             <ion-icon name="menu"></ion-icon>
         </button>
         <ion-title>Home</ion-title>
+        <p>{{players[0].turnCount}}</p>
     </ion-navbar>
 </ion-header>
 
@@ -31,10 +32,18 @@
     </div>
     <div class="active-cards">
         <div class="left-side">
-            <p>Property Cards Go Here</p>
+            <ul>
+                <li *ngFor="let card of players[0].activeCards">
+                    <img src="{{card.imageLocation}}" width="65px" height="105px">
+                </li>
+            </ul>
         </div>
         <div class="right-side">
-            <p>Money Cards Go Here</p>
+            <ul>
+                <li *ngFor="let card of players[0].moneyCards">
+                    <img src="{{card.imageLocation}}" width="65px" height="105px">
+                </li>
+            </ul>
         </div>
     </div>
     <div class="player-hand">

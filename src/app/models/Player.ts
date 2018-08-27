@@ -5,7 +5,7 @@ export class Player {
     lastName: string;
     value: number;
     hand: Card[];
-    money: Card[];
+    moneyCards: Card[];
     activeCards: Card[];
     turnCount: number;
 
@@ -14,8 +14,16 @@ export class Player {
         this.lastName = lastName;
         this.value = value;
         this.hand = [];
-        this.money = [];
+        this.moneyCards = [];
         this.activeCards = [];
         this.turnCount = 0;
+    }
+
+    organizeMoneyCards() {
+        if (this.moneyCards.length <= 1) {
+            return;
+        }
+
+        this.moneyCards.sort(function(a, b) { return a.value - b.value; });
     }
 }
