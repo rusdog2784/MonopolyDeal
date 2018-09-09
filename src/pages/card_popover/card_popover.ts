@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
-import { NavParams, ViewController } from 'ionic-angular';
+import { NavParams, ViewController, PopoverController, Popover } from 'ionic-angular';
 //import { CardOptions } from '../../app/models/CardOptions';
 import { ActionCard } from '../../app/models/ActionCard';
 import { PropertyCard } from '../../app/models/PropertyCard';
 import { Card } from '../../app/models/Card';
 import { Player } from '../../app/models/Player';
 import { MoneyCard } from '../../app/models/MoneyCard';
+import { Wildcard } from '../../app/models/Wildcard';
+import { RentCard } from '../../app/models/RentCard';
+import { WildcardPopover } from '../wildcard_popover/wildcard_popover';
 
 @Component({
     template: `
@@ -26,8 +29,9 @@ export class CardPopover {
     playedCards: Card[];
     player: Player;
     card: Card;
+    event;
 
-    constructor(private navParams: NavParams, private viewCtrl: ViewController) {
+    constructor(private navParams: NavParams, private viewCtrl: ViewController, public popoverCtrl: PopoverController) {
 
     }
 
@@ -36,6 +40,7 @@ export class CardPopover {
             this.playedCards = this.navParams.data.playedCards;
             this.player = this.navParams.data.player;
             this.card = this.navParams.data.card;
+            this.event = this.navParams.data.event;
         }
     }
 
@@ -46,10 +51,14 @@ export class CardPopover {
                 console.log("Taking action: PLAY");
                 index = this.player.hand.indexOf(this.card);
                 this.player.hand.splice(index, 1);
-                if (this.card instanceof ActionCard) {
+                if (this.card instanceof ActionCard || this.card instanceof RentCard) {
                     this.playedCards.push(this.card);
                 } else if (this.card instanceof PropertyCard) {
-                    this.player.activeCards.push(this.card);
+                    this.player.addActiveCard(this.card, this.card.type);
+                } else if (this.card instanceof Wildcard) {
+                    this.viewCtrl.dismiss();
+                    this.presentCardOptions(this.card.types);
+                    return;
                 } else if (this.card instanceof MoneyCard) {
                     let cardValue = this.card.value;
                     this.player.value += cardValue;
@@ -78,5 +87,17 @@ export class CardPopover {
                 break;
         }
         this.viewCtrl.dismiss();
+    }
+
+    presentCardOptions(types) {
+        console.log("Wildcard popover...");
+        console.log(this.player);
+        console.log(this.card);
+        let popover = this.popoverCtrl.create(WildcardPopover, {
+            player: this.player,
+            card: this.card,
+            types: types
+        });
+        popover.present();
     }
 }

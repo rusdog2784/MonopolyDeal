@@ -9,10 +9,10 @@ export class RentCard extends Card {
         super(title, value);
         this.types = types;
         var imageName: string;
-        if (this.types.length > 1) {
+        if (this.types.length == 2) {
             imageName = this.types[0] + "&" + this.types[1];
         } else {
-            imageName = this.types[0];
+            imageName = "All";
         }
         this.imageLocation = "assets/imgs/rent_cards/" + imageName + ".png";
     }

@@ -8,6 +8,5 @@ export enum PropertyType {
     Orange = "Orange",
     Brown = "Brown",
     Purple = "Purple",
-    Utility = "Utility",
-    All = "All"
+    Utility = "Utility"
 }

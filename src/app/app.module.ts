@@ -7,6 +7,7 @@ import { HomePage } from '../pages/home/home';
 import { ProfilePage } from '../pages/profile/profile';
 import { GamePage } from '../pages/game/game';
 import { CardPopover } from '../pages/card_popover/card_popover';
+import { WildcardPopover } from '../pages/wildcard_popover/wildcard_popover';
 
 import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
 const config: SocketIoConfig = { url: 'http://localhost:9000', options: {} };
@@ -22,7 +23,8 @@ import { IonicStorageModule } from '@ionic/storage';
     HomePage,
     ProfilePage,
     GamePage,
-    CardPopover
+    CardPopover,
+    WildcardPopover
   ],
   imports: [
     BrowserModule,
@@ -36,7 +38,8 @@ import { IonicStorageModule } from '@ionic/storage';
     HomePage,
     ProfilePage,
     GamePage,
-    CardPopover
+    CardPopover,
+    WildcardPopover
   ],
   providers: [
     StatusBar,

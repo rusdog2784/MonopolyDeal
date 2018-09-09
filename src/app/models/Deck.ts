@@ -121,7 +121,7 @@ export class Deck {
     }
 
     initializeWildcards() {
-        let all = new Wildcard("Property Wild Card", 0, [PropertyType.All]);
+        let all = new Wildcard("Property Wild Card", 0, [PropertyType.Green, PropertyType.DarkBlue, PropertyType.LightBlue, PropertyType.Red, PropertyType.Railroad, PropertyType.Yellow, PropertyType.Orange, PropertyType.Brown, PropertyType.Purple, PropertyType.Utility]);
         let darkBlueAndGreen = new Wildcard("Property Wild Card", 4, [PropertyType.DarkBlue, PropertyType.Green]);
         let lightBlueAndBrown = new Wildcard("Property Wild Card", 1, [PropertyType.LightBlue, PropertyType.Brown]);
         let lightBlueAndRailroad = new Wildcard("Property Wild Card", 4, [PropertyType.LightBlue, PropertyType.Railroad]);
@@ -142,7 +142,7 @@ export class Deck {
     }
 
     initializeRentCards() {
-        let all = new RentCard("Rent", 3, [PropertyType.All]);
+        let all = new RentCard("Rent", 3, [PropertyType.Green, PropertyType.DarkBlue, PropertyType.LightBlue, PropertyType.Red, PropertyType.Railroad, PropertyType.Yellow, PropertyType.Orange, PropertyType.Brown, PropertyType.Purple, PropertyType.Utility]);
         let darkBlueAndGreen = new RentCard("Rent", 1, [PropertyType.DarkBlue, PropertyType.Green]);
         let lightBlueAndBrown = new RentCard("Rent", 1, [PropertyType.LightBlue, PropertyType.Brown]);
         let purpleAndOrange = new RentCard("Rent", 1, [PropertyType.Purple, PropertyType.Orange]);

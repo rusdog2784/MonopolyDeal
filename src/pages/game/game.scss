@@ -46,22 +46,36 @@ page-game {
         height: 35%;
     }
 
-    .active-cards .left-side {
+    .active-cards .properties {
         width: 50%;
         float: left;
         height: 100%;
         overflow: scroll;
     }
 
-    .active-cards .right-side {
+    .active-cards .money-cards {
         width: 50%;
         float: left;
         height: 100%;
         overflow: scroll;
+    }
+
+    .active-cards .money-cards .value {
+        margin: 0 auto;
+        width: 50%;
+        text-align: center;
+        float: left;
+        height: 105px;
+        line-height: 105px;
     }
 
     .active-cards ul {
         list-style: none;
+        padding: 0px;
+    }
+
+    .active-cards li {
+        display: flex;
     }
 
     .player-hand {

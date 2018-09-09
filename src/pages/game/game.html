@@ -4,7 +4,7 @@
             <ion-icon name="menu"></ion-icon>
         </button>
         <ion-title>Home</ion-title>
-        <p>{{players[0].turnCount}}</p>
+        <!--<p>{{players[0].turnCount}}</p>-->
     </ion-navbar>
 </ion-header>
 
@@ -26,21 +26,23 @@
                 <img src="{{playedCards[playedCards.length - 1].imageLocation}}" width="65px" height="105px">
             </div>
             <div class="pick-up">
-                <img src="assets/imgs/deck_of_cards.png" width="65px" height="105px">
+                <img src="assets/imgs/deck_of_cards.png" width="65px" height="105px" (click)="pull2Cards()">
             </div>
         </div>
     </div>
     <div class="active-cards">
-        <div class="left-side">
+        <div class="properties">
             <ul>
-                <li *ngFor="let card of players[0].activeCards">
-                    <img src="{{card.imageLocation}}" width="65px" height="105px">
+                <li *ngFor="let set of players[0].getActiveCards()">
+                    <img *ngFor="let card of set" src="{{card.imageLocation}}" width="65px" height="105px">
+                    <!--<img src="{{card.imageLocation}}" width="65px" height="105px">-->
                 </li>
             </ul>
         </div>
-        <div class="right-side">
+        <div class="money-cards">
             <ul>
                 <li *ngFor="let card of players[0].moneyCards">
+                    <p class="value">{{card.value}}M</p>
                     <img src="{{card.imageLocation}}" width="65px" height="105px">
                 </li>
             </ul>

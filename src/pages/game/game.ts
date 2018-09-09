@@ -5,6 +5,8 @@ import { Card } from '../../app/models/Card';
 import { Player } from '../../app/models/Player';
 import { CardPopover } from '../card_popover/card_popover';
 import { Socket } from 'ng-socket-io';
+import { PropertyCard } from '../../app/models/PropertyCard';
+import { PropertyType } from '../../app/models/PropertyType';
 
 @Component({
   selector: 'page-game',
@@ -29,6 +31,18 @@ export class GamePage {
             player1.hand.push(this.deck.cards[0]);
             this.deck.cards.splice(0, 1);
         }
+        /*
+        let northCarolinaAve = new PropertyCard("North Carolina Avenue", 4, PropertyType.Green);
+        let pacificAvenue = new PropertyCard("Pacific Avenue", 4, PropertyType.Green);
+        let pennsylvaniaAvenue = new PropertyCard("Pennsylvania Avenue", 4, PropertyType.Green);
+        let boardwalk = new PropertyCard("Boardwalk", 4, PropertyType.DarkBlue);
+        let parkPlace = new PropertyCard("Park Place", 4, PropertyType.DarkBlue);
+        player1.hand.push(northCarolinaAve);
+        player1.hand.push(pacificAvenue);
+        player1.hand.push(pennsylvaniaAvenue);
+        player1.hand.push(boardwalk);
+        player1.hand.push(parkPlace);
+        */
         this.players.push(player1);
         console.log("[game.ts] Player 1, " + player1.firstName + ", has been created.");
         console.log("[game.ts] Their hand contains:");
@@ -53,7 +67,8 @@ export class GamePage {
         let popover = this.popoverCtrl.create(CardPopover, {
             playedCards: this.playedCards,
             player: this.players[0],
-            card: card
+            card: card,
+            event: ev
         });
         popover.present({
             ev: ev

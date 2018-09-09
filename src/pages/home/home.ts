@@ -8,7 +8,6 @@ import { DataProvider } from '../../providers/data/data';
   templateUrl: 'home.html'
 })
 export class HomePage {
-
   constructor(public navCtrl: NavController, public dataProvider: DataProvider) {
   }
 
