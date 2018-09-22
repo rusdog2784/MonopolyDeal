@@ -10,23 +10,24 @@ import { Player } from '../../app/models/Player';
   templateUrl: 'home.html'
 })
 export class HomePage {
+  firstName: string = "";
+  lastName: string = "";
   player: Player;
 
   constructor(public navCtrl: NavController, public dataProvider: DataProvider, private socket: Socket) {
-    this.player = dataProvider.getPlayer();
-    console.log("Player: " + this.player.firstName + " " + this.player.lastName);
   }
 
+  
   newGame(event, item) {
-    if (this.player.firstName == "" || this.player.lastName == "") {
+    if (this.firstName == "" || this.lastName == "") {
       console.log("Player name is empty");
       return;
     }
+    this.dataProvider.setPlayer(this.firstName, this.lastName);
     this.socket.connect();
-    this.socket.emit('player-entered', this.player);
+    this.socket.emit('player-entered', this.dataProvider.getPlayer());
     this.navCtrl.push(GamePage, {
-      player: this.player
+      player: this.dataProvider.getPlayer()
     });
   }
-
 }

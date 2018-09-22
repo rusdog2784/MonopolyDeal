@@ -8,14 +8,13 @@
 </ion-header>
 
 <ion-content padding>
-    <!--
     <div class="online-players">
         <ol>
             <li *ngFor="let opponent of opponents">
                 <div class="profile-pic">
                     <img src="assets/imgs/logo.png" width="55px" height="55px">
                 </div>
-                <div class="player-name">{{opponent.name}}</div>
+                <div class="player-name">{{opponent.firstName}}</div>
                 <div class="player-worth">${{opponent.value}}M</div>
             </li>
         </ol>
@@ -26,7 +25,7 @@
                 <img src="{{playedCards[playedCards.length - 1].imageLocation}}" width="65px" height="105px">
             </div>
             <div class="pick-up">
-                <img src="assets/imgs/deck_of_cards.png" width="65px" height="105px" (click)="pull2Cards()">
+                <img src="assets/imgs/deck_of_cards.png" width="65px" height="105px" (click)="pullCards(2)">
             </div>
         </div>
     </div>
@@ -54,7 +53,6 @@
             </li>
         </ul>
     </div>
-    -->
 
 </ion-content>
   

@@ -6,8 +6,8 @@ import { Card } from '../../app/models/Card';
 import { Player } from '../../app/models/Player';
 import { CardPopover } from '../card_popover/card_popover';
 import { Socket } from 'ng-socket-io';
-import { PropertyCard } from '../../app/models/PropertyCard';
-import { PropertyType } from '../../app/models/PropertyType';
+//import { PropertyCard } from '../../app/models/PropertyCard';
+//import { PropertyType } from '../../app/models/PropertyType';
 import { Observable } from '../../../node_modules/rxjs/Observable';
 
 @Component({
@@ -22,22 +22,20 @@ export class GamePage {
 
     constructor(public navCtrl: NavController, public alertCtrl: AlertController, public popoverCtrl: PopoverController, private socket: Socket, private navParams: NavParams) {
         this.opponents = [];
+        this.playedCards = [new Card('', 0)];
         this.mainPlayer = this.navParams.get('player');
         this.setupGame();
     }
 
     setupGame() {
         this.subscribeToPlayers().subscribe(data => {
-            console.log("[game.ts] New player.");
-            console.log(data);
-            console.log(typeof(data));
+            console.log("New player");
             let players: Player[] = data['players'];
-            for (let p of players) {
-                if (p.firstName != this.mainPlayer.firstName || p.lastName != this.mainPlayer.lastName) {
-                    if (this.opponents.indexOf(p) < 0) {
-                        console.log("[game.ts] Adding player to opponent list");
-                        console.log(p);
-                        this.opponents.push(p);
+            for (let player of players) {
+                if (player.firstName != this.mainPlayer.firstName || player.lastName != this.mainPlayer.lastName) {
+                    if (this.opponents.indexOf(player) < 0) {
+                        console.log(player.firstName + " " + player.lastName);
+                        this.opponents.push(player);
                     }
                 }
             }
@@ -49,11 +47,20 @@ export class GamePage {
         });
 
         this.subscribeToDeck().subscribe(data => {
-            let updatedDeck: Deck = data['deck'];
+            let updatedDeck: Deck = data['deck']['deck'];
             console.log("[game.ts] Updated deck: ");
             console.log(updatedDeck);
             this.deck = updatedDeck;
         });
+
+        this.subscribeToStart().subscribe(data => {
+            let amount: number = data['amount'];
+            let player: Player = data['player'];
+            console.log("[game.ts] starting...");
+            console.log("[game.ts] amount to pick up: " + amount);
+            console.log("[game.ts] player name: " + player.firstName + " " + player.lastName);
+            this.pullCards(amount);
+        })
     }
 
     subscribeToPlayers() {
@@ -83,10 +90,19 @@ export class GamePage {
         return observable;
     }
 
+    subscribeToStart() {
+        let observable = new Observable(observer => {
+            this.socket.on('pick-up-cards', (data) => {
+                observer.next(data);
+            });
+        });
+        return observable;
+    }
+
     createDeck() {
         this.deck = new Deck();
         this.socket.emit('new-deck', {
-            deck: this.deck.cards
+            deck: this.deck
         });
     }
 
@@ -104,18 +120,22 @@ export class GamePage {
         });
     }
 
-    pull2Cards() {
-        for (var i = 0; i < 2; i++) {
-            this.opponents[0].hand.push(this.deck.cards[0]);
+    pullCards(amount:number) {
+        console.log(this.deck);
+        for (var i = 0; i < amount; i++) {
+            this.mainPlayer.hand.push(this.deck['cards'][0]);
             this.deck.cards.splice(0, 1);
         }
+        this.socket.emit('new-deck', {
+            deck: this.deck
+        });
     }
 
     endTurn() {
         if (this.opponents[0].hand.length > 7) {
             const alert = this.alertCtrl.create({
                 title: 'Whoops!',
-                subTitle: 'You seem to have too many cards. Please select cards you want to discard.',
+                subTitle: 'You seem to have too many cards. Please discard some cards.',
                 buttons: ['OK']
             });
             alert.present();

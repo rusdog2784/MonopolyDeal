@@ -9,6 +9,16 @@
 
 <ion-content padding>
   <h3>Welcome to Monopoly Deal!</h3>
+  <ion-list>
+    <ion-item>
+      <ion-label stacked>First Name</ion-label>
+      <ion-input type="text" [(ngModel)]="firstName">{{firstName}}</ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label stacked>Last Name</ion-label>
+      <ion-input type="text" [(ngModel)]="lastName">{{lastName}}</ion-input>
+    </ion-item>
+  </ion-list>
 
   <button ion-button secondary (click)="newGame($event, item)">Start Game</button>
 

@@ -1,8 +1,6 @@
 //import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
-import { Storage } from '@ionic/storage';
 
 import { Player } from '../../app/models/Player';
 
@@ -10,7 +8,7 @@ import { Player } from '../../app/models/Player';
 export class DataProvider {
   player: Player;
 
-  constructor(private storage: Storage) {
+  constructor() {
     console.log('Hello DataProvider Provider');
     this.player = new Player("", "", 0);
   }
