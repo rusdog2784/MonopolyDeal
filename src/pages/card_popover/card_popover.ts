@@ -9,6 +9,7 @@ import { MoneyCard } from '../../app/models/MoneyCard';
 import { Wildcard } from '../../app/models/Wildcard';
 import { RentCard } from '../../app/models/RentCard';
 import { WildcardPopover } from '../wildcard_popover/wildcard_popover';
+import { Socket } from 'ng-socket-io';
 
 @Component({
     template: `
@@ -31,7 +32,7 @@ export class CardPopover {
     card: Card;
     event;
 
-    constructor(private navParams: NavParams, private viewCtrl: ViewController, public popoverCtrl: PopoverController) {
+    constructor(private navParams: NavParams, private viewCtrl: ViewController, public popoverCtrl: PopoverController, private socket: Socket) {
 
     }
 
@@ -53,17 +54,20 @@ export class CardPopover {
                 this.player.hand.splice(index, 1);
                 if (this.card instanceof ActionCard || this.card instanceof RentCard) {
                     this.playedCards.push(this.card);
+                    this.socket.emit('action-card', {card: this.card, player: this.player});
                 } else if (this.card instanceof PropertyCard) {
                     this.player.addActiveCard(this.card, this.card.type);
+                    this.socket.emit('property-card', {card: this.card, player: this.player});
                 } else if (this.card instanceof Wildcard) {
                     this.viewCtrl.dismiss();
                     this.presentCardOptions(this.card.types);
-                    return;
+                    this.socket.emit('property-card', {card: this.card, player: this.player});
                 } else if (this.card instanceof MoneyCard) {
                     let cardValue = this.card.value;
                     this.player.value += cardValue;
                     this.player.moneyCards.push(this.card);
                     this.player.organizeMoneyCards();
+                    this.socket.emit('money-card', {card: this.card, player: this.player});
                 }
                 this.player.turnCount++;
                 break;
@@ -75,6 +79,7 @@ export class CardPopover {
                 this.player.organizeMoneyCards();
                 index = this.player.hand.indexOf(this.card);
                 this.player.hand.splice(index, 1);
+                this.socket.emit('money-card', {card: this.card, player: this.player});
                 this.player.turnCount++;
                 break;
             case 'DISCARD':

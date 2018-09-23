@@ -48,8 +48,6 @@ export class GamePage {
 
         this.subscribeToDeck().subscribe(data => {
             let updatedDeck: Deck = data['deck']['deck'];
-            console.log("[game.ts] Updated deck: ");
-            console.log(updatedDeck);
             this.deck = updatedDeck;
         });
 
@@ -60,7 +58,25 @@ export class GamePage {
             console.log("[game.ts] amount to pick up: " + amount);
             console.log("[game.ts] player name: " + player.firstName + " " + player.lastName);
             this.pullCards(amount);
-        })
+        });
+
+        this.subscribeToActionCards().subscribe(data => {
+            let card: Card = data['card'];
+            let player: Player = data['player'];
+            console.log("Action card played by: " + player.firstName + " " + player.lastName);
+        });
+
+        this.subscribeToPropertyCards().subscribe(data => {
+            let card: Card = data['card'];
+            let player: Player = data['player'];
+            console.log("Property card played by: " + player.firstName + " " + player.lastName);
+        });
+
+        this.subscribeToMoneyCards().subscribe(data => {
+            let card: Card = data['card'];
+            let player: Player = data['player'];
+            console.log("Money card played by: " + player.firstName + " " + player.lastName);
+        });
     }
 
     subscribeToPlayers() {
@@ -99,6 +115,33 @@ export class GamePage {
         return observable;
     }
 
+    subscribeToActionCards() {
+        let observable = new Observable(observer => {
+            this.socket.on('action-card-played', (data) => {
+                observer.next(data);
+            });
+        });
+        return observable;
+    }
+
+    subscribeToPropertyCards() {
+        let observable = new Observable(observer => {
+            this.socket.on('property-card-played', (data) => {
+                observer.next(data);
+            });
+        });
+        return observable;
+    }
+
+    subscribeToMoneyCards() {
+        let observable = new Observable(observer => {
+            this.socket.on('money-card-played', (data) => {
+                observer.next(data);
+            });
+        });
+        return observable;
+    }
+
     createDeck() {
         this.deck = new Deck();
         this.socket.emit('new-deck', {
@@ -111,7 +154,7 @@ export class GamePage {
         console.log(card);
         let popover = this.popoverCtrl.create(CardPopover, {
             playedCards: this.playedCards,
-            player: this.opponents[0],
+            player: this.mainPlayer,
             card: card,
             event: ev
         });
