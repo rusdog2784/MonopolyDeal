@@ -12,5 +12,6 @@ export class PropertyCard extends Card {
         imageName = imageName.replace(" ", "");
         imageName = imageName.replace(" ", "");
         this.imageLocation = "assets/imgs/property_cards/" + imageName + ".png";
+        super.setCardType("PropertyCard");
     }
 }

@@ -6,5 +6,6 @@ export class MoneyCard extends Card {
     constructor(title: string, value: number) {
         super(title, value);
         this.imageLocation = "assets/imgs/money_cards/" + title + ".png";
+        super.setCardType("MoneyCard");
     }
 }

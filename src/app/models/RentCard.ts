@@ -15,5 +15,6 @@ export class RentCard extends Card {
             imageName = "All";
         }
         this.imageLocation = "assets/imgs/rent_cards/" + imageName + ".png";
+        super.setCardType("RentCard");
     }
 }

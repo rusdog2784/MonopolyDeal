@@ -15,5 +15,6 @@ export class Wildcard extends Card {
             imageName = "All";
         }
         this.imageLocation = "assets/imgs/wildcards/" + imageName + ".png";
+        super.setCardType("Wildcard");
     }
 }

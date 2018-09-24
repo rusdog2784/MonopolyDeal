@@ -10,6 +10,7 @@ export class ActionCard extends Card {
         var imageName = title.replace(" ", "");
         imageName = imageName.replace(" ", "");
         this.imageLocation = "assets/imgs/action_cards/" + imageName + ".png";
+        super.setCardType("ActionCard");
     }
 
 }

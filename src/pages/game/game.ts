@@ -5,10 +5,8 @@ import { Deck } from '../../app/models/Deck';
 import { Card } from '../../app/models/Card';
 import { Player } from '../../app/models/Player';
 import { CardPopover } from '../card_popover/card_popover';
-import { Socket } from 'ng-socket-io';
-//import { PropertyCard } from '../../app/models/PropertyCard';
-//import { PropertyType } from '../../app/models/PropertyType';
-import { Observable } from '../../../node_modules/rxjs/Observable';
+import { SocketProvider } from '../../providers/socket/socket';
+import { ActionCard } from '../../app/models/ActionCard';
 
 @Component({
   selector: 'page-game',
@@ -19,175 +17,180 @@ export class GamePage {
     mainPlayer: Player;
     playedCards: Card[];
     opponents: Player[];
+    myTurn: boolean;
 
-    constructor(public navCtrl: NavController, public alertCtrl: AlertController, public popoverCtrl: PopoverController, private socket: Socket, private navParams: NavParams) {
+    constructor(public navCtrl: NavController, public alertCtrl: AlertController, public popoverCtrl: PopoverController, public socketProvider: SocketProvider, private navParams: NavParams) {
         this.opponents = [];
         this.playedCards = [new Card('', 0)];
         this.mainPlayer = this.navParams.get('player');
+        this.myTurn = false;
         this.setupGame();
     }
 
     setupGame() {
-        this.subscribeToPlayers().subscribe(data => {
-            console.log("New player");
-            let players: Player[] = data['players'];
-            for (let player of players) {
-                if (player.firstName != this.mainPlayer.firstName || player.lastName != this.mainPlayer.lastName) {
-                    if (this.opponents.indexOf(player) < 0) {
-                        console.log(player.firstName + " " + player.lastName);
-                        this.opponents.push(player);
-                    }
-                }
-            }
-        });
-
-        this.subscribeToCreateNewDeck().subscribe(() => {
-            console.log("[game.ts] Asked to create a new deck!");
+        this.socketProvider.subscribeTo('create-deck').subscribe(() => {
             this.createDeck();
         });
 
-        this.subscribeToDeck().subscribe(data => {
+        this.socketProvider.subscribeTo('players').subscribe(data => {
+            let players: Player[] = data['players'];
+            this.handlePlayers(players);
+        });
+        
+        this.socketProvider.subscribeTo('updated-deck').subscribe(data => {
             let updatedDeck: Deck = data['deck']['deck'];
-            this.deck = updatedDeck;
+            this.handleDeckChange(updatedDeck);
         });
 
-        this.subscribeToStart().subscribe(data => {
+        this.socketProvider.subscribeTo('initial-cards').subscribe(data => {
             let amount: number = data['amount'];
-            let player: Player = data['player'];
-            console.log("[game.ts] starting...");
-            console.log("[game.ts] amount to pick up: " + amount);
-            console.log("[game.ts] player name: " + player.firstName + " " + player.lastName);
+            //let player: Player = data['player'];
             this.pullCards(amount);
         });
 
-        this.subscribeToActionCards().subscribe(data => {
+        this.socketProvider.subscribeTo('my-turn').subscribe(() => {
+            this.handleMyTurn();
+        });
+
+        this.socketProvider.subscribeTo('action-card-played').subscribe(data => {
             let card: Card = data['card'];
             let player: Player = data['player'];
-            console.log("Action card played by: " + player.firstName + " " + player.lastName);
+            this.handleActionCardPlayed(card, player);
         });
 
-        this.subscribeToPropertyCards().subscribe(data => {
+        this.socketProvider.subscribeTo('property-card-played').subscribe(data => {
             let card: Card = data['card'];
             let player: Player = data['player'];
-            console.log("Property card played by: " + player.firstName + " " + player.lastName);
+            this.handlePropertyCardPlayed(card, player);
         });
 
-        this.subscribeToMoneyCards().subscribe(data => {
+        this.socketProvider.subscribeTo('money-card-played').subscribe(data => {
             let card: Card = data['card'];
             let player: Player = data['player'];
-            console.log("Money card played by: " + player.firstName + " " + player.lastName);
+            this.handleMoneyCardPlayed(card, player);
         });
     }
 
-    subscribeToPlayers() {
-        let observable = new Observable(observer => {
-            this.socket.on('new-player', (data) => {
-                observer.next(data);
-            });
-        });
-        return observable;
+    handlePlayers(players) {
+        for (let player of players) {
+            if (player.firstName != this.mainPlayer.firstName || player.lastName != this.mainPlayer.lastName) {
+                if (this.opponents.indexOf(player) < 0) {
+                    console.log("New player: " + player.firstName + " " + player.lastName);
+                    this.opponents.push(player);
+                }
+            }
+        }
     }
 
-    subscribeToCreateNewDeck() {
-        let observable = new Observable(observer => {
-            this.socket.on('create-deck', (data) => {
-                observer.next(data);
-            });
-        });
-        return observable;
+    handleDeckChange(updatedDeck) {
+        let newDeck: Deck = updatedDeck;
+        this.deck = newDeck;
     }
 
-    subscribeToDeck() {
-        let observable = new Observable(observer => {
-            this.socket.on('deck-change', (data) => {
-                observer.next(data);
-            });
-        });
-        return observable;
+    handleMyTurn() {
+        this.myTurn = true;
+        this.pullCards(2);
+        this.displayYourTurn();
     }
 
-    subscribeToStart() {
-        let observable = new Observable(observer => {
-            this.socket.on('pick-up-cards', (data) => {
-                observer.next(data);
-            });
-        });
-        return observable;
+    handleActionCardPlayed(card, player) {
+        console.log("Action card (" + card.title + ") played by: " + player.firstName + " " + player.lastName);
     }
 
-    subscribeToActionCards() {
-        let observable = new Observable(observer => {
-            this.socket.on('action-card-played', (data) => {
-                observer.next(data);
-            });
-        });
-        return observable;
+    handlePropertyCardPlayed(card, player) {
+        console.log("Property card (" + card.title + ") played by: " + player.firstName + " " + player.lastName);
     }
 
-    subscribeToPropertyCards() {
-        let observable = new Observable(observer => {
-            this.socket.on('property-card-played', (data) => {
-                observer.next(data);
-            });
-        });
-        return observable;
-    }
-
-    subscribeToMoneyCards() {
-        let observable = new Observable(observer => {
-            this.socket.on('money-card-played', (data) => {
-                observer.next(data);
-            });
-        });
-        return observable;
+    handleMoneyCardPlayed(card, player) {
+        console.log("Money card (" + card.title + ") played by: " + player.firstName + " " + player.lastName);
     }
 
     createDeck() {
+        console.log("Creating new deck and emitting.");
         this.deck = new Deck();
-        this.socket.emit('new-deck', {
-            deck: this.deck
-        });
+        this.socketProvider.emit('new-deck', { deck: this.deck });
     }
 
     presentCardOptions(ev, card: Card) {
-        console.log("Player touched card:");
-        console.log(card);
-        let popover = this.popoverCtrl.create(CardPopover, {
-            playedCards: this.playedCards,
-            player: this.mainPlayer,
-            card: card,
-            event: ev
-        });
-        popover.present({
-            ev: ev
-        });
+        if (this.myTurn) {
+            console.log("Player touched card: " + card.title);
+            let popover = this.popoverCtrl.create(CardPopover, {
+                playedCards: this.playedCards,
+                player: this.mainPlayer,
+                card: card,
+                event: ev
+            });
+            popover.present({
+                ev: ev
+            });
+        } else {
+            this.displayNotYourTurn();
+        }
     }
 
     pullCards(amount:number) {
-        console.log(this.deck);
+        console.log("Pulling " + amount + " cards and emitting new deck.");
         for (var i = 0; i < amount; i++) {
-            this.mainPlayer.hand.push(this.deck['cards'][0]);
+            let card: Card = this.deck['cards'][0];
+            this.mainPlayer.hand.push(card);
             this.deck.cards.splice(0, 1);
         }
-        this.socket.emit('new-deck', {
-            deck: this.deck
-        });
+        this.socketProvider.emit('new-deck', { deck: this.deck });
     }
 
     endTurn() {
-        if (this.opponents[0].hand.length > 7) {
-            const alert = this.alertCtrl.create({
-                title: 'Whoops!',
-                subTitle: 'You seem to have too many cards. Please discard some cards.',
-                buttons: ['OK']
-            });
-            alert.present();
+        if (this.mainPlayer.hand.length > 7) {
+            this.displayTooManyCards();
+        } else if (this.myTurn == false) {
+            this.displayNotYourTurn();
         } else {
-            const alert = this.alertCtrl.create({
-                title: 'Turn Ended',
-                buttons: ['OK']
-            });
-            alert.present();
+            this.displayEndYourTurn();
         }
+    }
+
+    displayNotYourTurn() {
+        const alert = this.alertCtrl.create({
+            title: "Sorry",
+            subTitle: "It's not currently your turn.",
+            buttons: ['Ok']
+        });
+        alert.present();
+    }
+
+    displayYourTurn() {
+        const alert = this.alertCtrl.create({
+            title: "Hey!",
+            subTitle: "It's your turn.",
+            buttons: ['Ok']
+        });
+        alert.present();
+    }
+
+    displayEndYourTurn() {
+        const alert = this.alertCtrl.create({
+            title: 'Turn Ended',
+            buttons: [
+                {
+                    text: 'Ok',
+                    handler: () => {
+                        alert.dismiss().then(() => { 
+                            this.myTurn = false;
+                            this.socketProvider.emit('end-turn', { player: this.mainPlayer });
+                        });
+                        return false;
+                    }
+                }
+            ]
+        });
+        alert.present();
+    }
+
+    displayTooManyCards() {
+        const alert = this.alertCtrl.create({
+            title: 'Whoops!',
+            subTitle: 'You seem to have too many cards. Please discard some cards.',
+            buttons: ['OK']
+        });
+        alert.present();
     }
 }

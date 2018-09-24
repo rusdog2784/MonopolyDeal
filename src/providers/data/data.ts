@@ -1,7 +1,6 @@
 //import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/catch';
-
 import { Player } from '../../app/models/Player';
 
 @Injectable()

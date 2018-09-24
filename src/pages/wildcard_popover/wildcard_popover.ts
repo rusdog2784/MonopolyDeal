@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavParams, ViewController } from 'ionic-angular';
 import { Card } from '../../app/models/Card';
 import { Player } from '../../app/models/Player';
+import { Socket } from 'ng-socket-io';
 
 @Component({
     template: `
@@ -17,7 +18,7 @@ export class WildcardPopover {
     card: Card;
     types = [];
 
-    constructor(private navParams: NavParams, private viewCtrl: ViewController) {
+    constructor(private navParams: NavParams, private viewCtrl: ViewController, private socket: Socket) {
 
     }
 
@@ -31,6 +32,7 @@ export class WildcardPopover {
 
     takeAction(type) {
         this.player.addActiveCard(this.card, type);
+        this.socket.emit('property-card', {card: this.card, player: this.player});
         this.viewCtrl.dismiss();
     }
 }

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { GamePage } from '../game/game';
 import { DataProvider } from '../../providers/data/data';
-import { Socket } from 'ng-socket-io';
+import { SocketProvider } from '../../providers/socket/socket';
 import { Player } from '../../app/models/Player';
 
 @Component({
@@ -14,7 +14,7 @@ export class HomePage {
   lastName: string = "";
   player: Player;
 
-  constructor(public navCtrl: NavController, public dataProvider: DataProvider, private socket: Socket) {
+  constructor(public navCtrl: NavController, public dataProvider: DataProvider, public socketProvider: SocketProvider) {
   }
 
   
@@ -24,8 +24,7 @@ export class HomePage {
       return;
     }
     this.dataProvider.setPlayer(this.firstName, this.lastName);
-    this.socket.connect();
-    this.socket.emit('player-entered', this.dataProvider.getPlayer());
+    this.socketProvider.connect();
     this.navCtrl.push(GamePage, {
       player: this.dataProvider.getPlayer()
     });
