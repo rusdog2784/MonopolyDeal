@@ -74,9 +74,16 @@ export class GamePage {
     handlePlayers(players) {
         for (let player of players) {
             if (player.firstName != this.mainPlayer.firstName || player.lastName != this.mainPlayer.lastName) {
-                if (this.opponents.indexOf(player) < 0) {
+                if (this.opponents.length <= 0) {
                     console.log("New player: " + player.firstName + " " + player.lastName);
                     this.opponents.push(player);
+                } else {
+                    for (let opponent of this.opponents) {
+                        if (opponent.firstName != player.firstName || opponent.lastName != player.lastName) {
+                            console.log("New player: " + player.firstName + " " + player.lastName);
+                            this.opponents.push(player);
+                        }
+                    }
                 }
             }
         }

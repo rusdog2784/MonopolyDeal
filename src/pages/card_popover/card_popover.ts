@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavParams, ViewController, PopoverController, Popover } from 'ionic-angular';
+import { NavParams, ViewController, PopoverController } from 'ionic-angular';
 //import { CardOptions } from '../../app/models/CardOptions';
 import { ActionCard } from '../../app/models/ActionCard';
 import { PropertyCard } from '../../app/models/PropertyCard';
