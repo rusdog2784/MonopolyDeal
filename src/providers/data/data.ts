@@ -13,7 +13,7 @@ export class DataProvider {
     this.player = new Player("", "", 0);
   }
 
-  setPlayer(firstName:string, lastName:string, socketProvider: SocketProvider) {
+  setPlayer(firstName:string, lastName:string) {
     console.log("[data.ts]: Saving user data: " + firstName + " " + lastName);
     this.player.firstName = firstName;
     this.player.lastName = lastName;
