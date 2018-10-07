@@ -1,18 +1,14 @@
 import { Card } from "./Card";
-import { ActionCard } from "./ActionCard";
-import { PropertyCard } from "./PropertyCard";
 import { PropertyType } from "./PropertyType";
-import { Wildcard } from "./Wildcard";
-import { RentCard } from "./RentCard";
-import { MoneyCard } from "./MoneyCard";
+import { CardType } from "./CardType";
 
 export class Deck {
     cards: Card[];
-    actionCards: ActionCard[];
-    propertyCards: PropertyCard[];
-    wildcards: Wildcard[];
-    rentCards: RentCard[];
-    moneyCards: MoneyCard[];
+    actionCards: Card[];
+    propertyCards: Card[];
+    wildcards: Card[];
+    rentCards: Card[];
+    moneyCards: Card[];
 
     constructor() {
         this.cards = [];
@@ -30,16 +26,16 @@ export class Deck {
     }
 
     initializeActionCards() {
-        let dealBreaker = new ActionCard("Deal Breaker", "Steals a complete set of properties from any player. (Includes any buildings) Play into center to use.", 5);
-        let justSayNo = new ActionCard("Just Say No", "Use any time when an action card is played against you. Play into center to use.", 4);
-        let slyDeal = new ActionCard("Sly Deal", "Steal a property from the player of your choice. (Cannot be part of a full set) Play into center to use.", 3);
-        let forcedDeal = new ActionCard("Forced Deal", "Swap any property with another player. (Cannot be part of a full set) Play into center to use.", 3);
-        let debtCollector = new ActionCard("Debt Collector", "Force any player to pay you 5M. Play into center to use.", 3);
-        let itsMyBirthday = new ActionCard("Its My Birthday", "All players give you 2M as a 'gift'. Play into center to use.", 2);
-        let passGo = new ActionCard("Pass Go", "Draw 2 extra cards. Play into center to use.", 1);
-        let house = new ActionCard("House", "Add onto any full set you own to add 3M to the rent value. (Except railroads and Utility)", 3);
-        let hotel = new ActionCard("Hotel", "Add onto any full set you own to add 4M to the rent value. (Except railroads and Utility)", 4);
-        let doubleTheRent = new ActionCard("Double The Rent", "Needs to played with a rent card. Play into center to use.", 1);
+        let dealBreaker = new Card("Deal Breaker", "Steals a complete set of properties from any player. (Includes any buildings) Play into center to use.", 5, CardType.Action, []);
+        let justSayNo = new Card("Just Say No", "Use any time when an action card is played against you. Play into center to use.", 4, CardType.Action, []);
+        let slyDeal = new Card("Sly Deal", "Steal a property from the player of your choice. (Cannot be part of a full set) Play into center to use.", 3, CardType.Action, []);
+        let forcedDeal = new Card("Forced Deal", "Swap any property with another player. (Cannot be part of a full set) Play into center to use.", 3, CardType.Action, []);
+        let debtCollector = new Card("Debt Collector", "Force any player to pay you 5M. Play into center to use.", 3, CardType.Action, []);
+        let itsMyBirthday = new Card("Its My Birthday", "All players give you 2M as a 'gift'. Play into center to use.", 2, CardType.Action, []);
+        let passGo = new Card("Pass Go", "Draw 2 extra cards. Play into center to use.", 1, CardType.Action, []);
+        let house = new Card("House", "Add onto any full set you own to add 3M to the rent value. (Except railroads and Utility)", 3, CardType.Action, []);
+        let hotel = new Card("Hotel", "Add onto any full set you own to add 4M to the rent value. (Except railroads and Utility)", 4, CardType.Action, []);
+        let doubleTheRent = new Card("Double The Rent", "Needs to played with a rent card. Play into center to use.", 1, CardType.Action, []);
         var i;
         for (i = 0; i < 2; i++) {
             this.actionCards.push(dealBreaker);
@@ -62,73 +58,73 @@ export class Deck {
     }
 
     initializePropertyCards() {
-        let northCarolinaAve = new PropertyCard("North Carolina Avenue", 4, PropertyType.Green);
-        let pacificAvenue = new PropertyCard("Pacific Avenue", 4, PropertyType.Green);
-        let pennsylvaniaAvenue = new PropertyCard("Pennsylvania Avenue", 4, PropertyType.Green);
+        let northCarolinaAve = new Card("North Carolina Avenue", "", 4, CardType.Property, [PropertyType.Green]);
+        let pacificAvenue = new Card("Pacific Avenue", "", 4, CardType.Property, [PropertyType.Green]);
+        let pennsylvaniaAvenue = new Card("Pennsylvania Avenue", "", 4, CardType.Property, [PropertyType.Green]);
         this.propertyCards.push(northCarolinaAve);
         this.propertyCards.push(pacificAvenue);
         this.propertyCards.push(pennsylvaniaAvenue);
-        let boardwalk = new PropertyCard("Boardwalk", 4, PropertyType.DarkBlue);
-        let parkPlace = new PropertyCard("Park Place", 4, PropertyType.DarkBlue);
+        let boardwalk = new Card("Boardwalk", "", 4, CardType.Property, [PropertyType.DarkBlue]);
+        let parkPlace = new Card("Park Place", "", 4, CardType.Property, [PropertyType.DarkBlue]);
         this.propertyCards.push(boardwalk);
         this.propertyCards.push(parkPlace);
-        let connecticutAvenue = new PropertyCard("Connecticut Avenue", 1, PropertyType.LightBlue);
-        let orientalAvenue = new PropertyCard("Oriental Avenue", 1, PropertyType.LightBlue);
-        let vermontAvenue = new PropertyCard("Vermont Avenue", 1, PropertyType.LightBlue);
+        let connecticutAvenue = new Card("Connecticut Avenue", "", 1, CardType.Property, [PropertyType.LightBlue]);
+        let orientalAvenue = new Card("Oriental Avenue", "", 1, CardType.Property, [PropertyType.LightBlue]);
+        let vermontAvenue = new Card("Vermont Avenue", "", 1, CardType.Property, [PropertyType.LightBlue]);
         this.propertyCards.push(connecticutAvenue);
         this.propertyCards.push(orientalAvenue);
         this.propertyCards.push(vermontAvenue);
-        let kentuckyAvenue = new PropertyCard("Kentucky Avenue", 3, PropertyType.Red);
-        let indianaAvenue = new PropertyCard("Indiana Avenue", 3, PropertyType.Red);
-        let illinoisAvenue = new PropertyCard("Illinois Avenue", 3, PropertyType.Red);
+        let kentuckyAvenue = new Card("Kentucky Avenue", "", 3, CardType.Property, [PropertyType.Red]);
+        let indianaAvenue = new Card("Indiana Avenue", "", 3, CardType.Property, [PropertyType.Red]);
+        let illinoisAvenue = new Card("Illinois Avenue", "", 3, CardType.Property, [PropertyType.Red]);
         this.propertyCards.push(kentuckyAvenue);
         this.propertyCards.push(indianaAvenue);
         this.propertyCards.push(illinoisAvenue);
-        let shortLine = new PropertyCard("Short Line", 2, PropertyType.Railroad);
-        let boRailroad = new PropertyCard("B & O Railroad", 2, PropertyType.Railroad);
-        let readingRailroad = new PropertyCard("Reading Railroad", 2, PropertyType.Railroad);
-        let pennsylvaniaRailroad = new PropertyCard("Pennsylvania Railroad", 2, PropertyType.Railroad);
+        let shortLine = new Card("Short Line", "", 2, CardType.Property, [PropertyType.Railroad]);
+        let boRailroad = new Card("B & O Railroad", "", 2, CardType.Property, [PropertyType.Railroad]);
+        let readingRailroad = new Card("Reading Railroad", "", 2, CardType.Property, [PropertyType.Railroad]);
+        let pennsylvaniaRailroad = new Card("Pennsylvania Railroad", "", 2, CardType.Property, [PropertyType.Railroad]);
         this.propertyCards.push(shortLine);
         this.propertyCards.push(boRailroad);
         this.propertyCards.push(readingRailroad);
         this.propertyCards.push(pennsylvaniaRailroad);
-        let ventnorAvenue = new PropertyCard("Ventnor Avenue", 3, PropertyType.Yellow);
-        let marvinGardens = new PropertyCard("Marvin Gardens", 3, PropertyType.Yellow);
-        let atlanticAvenue = new PropertyCard("Atlantic Avenue", 3, PropertyType.Yellow);
+        let ventnorAvenue = new Card("Ventnor Avenue", "", 3, CardType.Property, [PropertyType.Yellow]);
+        let marvinGardens = new Card("Marvin Gardens", "", 3, CardType.Property, [PropertyType.Yellow]);
+        let atlanticAvenue = new Card("Atlantic Avenue", "", 3, CardType.Property, [PropertyType.Yellow]);
         this.propertyCards.push(ventnorAvenue);
         this.propertyCards.push(marvinGardens);
         this.propertyCards.push(atlanticAvenue);
-        let newYorkAvenue = new PropertyCard("New York Avenue", 2, PropertyType.Orange);
-        let stJamesPlace = new PropertyCard("St James Place", 2, PropertyType.Orange);
-        let tennesseeAvenue = new PropertyCard("Tennessee Avenue", 2, PropertyType.Orange);
+        let newYorkAvenue = new Card("New York Avenue", "", 2, CardType.Property, [PropertyType.Orange]);
+        let stJamesPlace = new Card("St James Place", "", 2, CardType.Property, [PropertyType.Orange]);
+        let tennesseeAvenue = new Card("Tennessee Avenue", "", 2, CardType.Property, [PropertyType.Orange]);
         this.propertyCards.push(newYorkAvenue);
         this.propertyCards.push(stJamesPlace);
         this.propertyCards.push(tennesseeAvenue);
-        let balticAvenue = new PropertyCard("Baltic Avenue", 1, PropertyType.Brown);
-        let mediterraneanAvenue = new PropertyCard("Mediterranean Avenue", 1, PropertyType.Brown);
+        let balticAvenue = new Card("Baltic Avenue", "", 1, CardType.Property, [PropertyType.Brown]);
+        let mediterraneanAvenue = new Card("Mediterranean Avenue", "", 1, CardType.Property, [PropertyType.Brown]);
         this.propertyCards.push(balticAvenue);
         this.propertyCards.push(mediterraneanAvenue);
-        let stCharlesPlace = new PropertyCard("St Charles Place", 2, PropertyType.Purple);
-        let virginiaAvenue = new PropertyCard("Virginia Avenue", 2, PropertyType.Purple);
-        let statesAvenue = new PropertyCard("States Avenue", 2, PropertyType.Purple);
+        let stCharlesPlace = new Card("St Charles Place", "", 2, CardType.Property, [PropertyType.Purple]);
+        let virginiaAvenue = new Card("Virginia Avenue", "", 2, CardType.Property, [PropertyType.Purple]);
+        let statesAvenue = new Card("States Avenue", "", 2, CardType.Property, [PropertyType.Purple]);
         this.propertyCards.push(stCharlesPlace);
         this.propertyCards.push(virginiaAvenue);
         this.propertyCards.push(statesAvenue);
-        let waterWorks = new PropertyCard("Water Works", 2, PropertyType.Utility);
-        let electricCompany = new PropertyCard("Electric Company", 2, PropertyType.Utility);
+        let waterWorks = new Card("Water Works", "", 2, CardType.Property, [PropertyType.Utility]);
+        let electricCompany = new Card("Electric Company", "", 2, CardType.Property, [PropertyType.Utility]);
         this.propertyCards.push(waterWorks);
         this.propertyCards.push(electricCompany);
     }
 
     initializeWildcards() {
-        let all = new Wildcard("Property Wild Card", 0, [PropertyType.Green, PropertyType.DarkBlue, PropertyType.LightBlue, PropertyType.Red, PropertyType.Railroad, PropertyType.Yellow, PropertyType.Orange, PropertyType.Brown, PropertyType.Purple, PropertyType.Utility]);
-        let darkBlueAndGreen = new Wildcard("Property Wild Card", 4, [PropertyType.DarkBlue, PropertyType.Green]);
-        let lightBlueAndBrown = new Wildcard("Property Wild Card", 1, [PropertyType.LightBlue, PropertyType.Brown]);
-        let lightBlueAndRailroad = new Wildcard("Property Wild Card", 4, [PropertyType.LightBlue, PropertyType.Railroad]);
-        let purpleAndOrange = new Wildcard("Property Wild Card", 2, [PropertyType.Purple, PropertyType.Orange]);
-        let railroadAndGreen = new Wildcard("Property Wild Card", 4, [PropertyType.Railroad, PropertyType.Green]);
-        let railroadAndUtility = new Wildcard("Property Wild Card", 2, [PropertyType.Railroad, PropertyType.Utility]);
-        let redAndYellow = new Wildcard("Property Wild Card", 3, [PropertyType.Red, PropertyType.Yellow]);
+        let all = new Card("Property Wild Card", "", 0, CardType.Wildcard, [PropertyType.Green, PropertyType.DarkBlue, PropertyType.LightBlue, PropertyType.Red, PropertyType.Railroad, PropertyType.Yellow, PropertyType.Orange, PropertyType.Brown, PropertyType.Purple, PropertyType.Utility]);
+        let darkBlueAndGreen = new Card("Property Wild Card", "", 4, CardType.Wildcard, [PropertyType.DarkBlue, PropertyType.Green]);
+        let lightBlueAndBrown = new Card("Property Wild Card", "", 1, CardType.Wildcard, [PropertyType.LightBlue, PropertyType.Brown]);
+        let lightBlueAndRailroad = new Card("Property Wild Card", "", 4, CardType.Wildcard, [PropertyType.LightBlue, PropertyType.Railroad]);
+        let purpleAndOrange = new Card("Property Wild Card", "", 2, CardType.Wildcard, [PropertyType.Purple, PropertyType.Orange]);
+        let railroadAndGreen = new Card("Property Wild Card", "", 4, CardType.Wildcard, [PropertyType.Railroad, PropertyType.Green]);
+        let railroadAndUtility = new Card("Property Wild Card", "", 2, CardType.Wildcard, [PropertyType.Railroad, PropertyType.Utility]);
+        let redAndYellow = new Card("Property Wild Card", "", 3, CardType.Wildcard, [PropertyType.Red, PropertyType.Yellow]);
         this.wildcards.push(darkBlueAndGreen);
         this.wildcards.push(lightBlueAndBrown);
         this.wildcards.push(lightBlueAndRailroad);
@@ -142,12 +138,12 @@ export class Deck {
     }
 
     initializeRentCards() {
-        let all = new RentCard("Rent", 3, [PropertyType.Green, PropertyType.DarkBlue, PropertyType.LightBlue, PropertyType.Red, PropertyType.Railroad, PropertyType.Yellow, PropertyType.Orange, PropertyType.Brown, PropertyType.Purple, PropertyType.Utility]);
-        let darkBlueAndGreen = new RentCard("Rent", 1, [PropertyType.DarkBlue, PropertyType.Green]);
-        let lightBlueAndBrown = new RentCard("Rent", 1, [PropertyType.LightBlue, PropertyType.Brown]);
-        let purpleAndOrange = new RentCard("Rent", 1, [PropertyType.Purple, PropertyType.Orange]);
-        let railroadAndUtility = new RentCard("Rent", 1, [PropertyType.Railroad, PropertyType.Utility]);
-        let redAndYellow = new RentCard("Rent", 1, [PropertyType.Red, PropertyType.Yellow]);
+        let all = new Card("Rent", "", 3, CardType.Rent, [PropertyType.Green, PropertyType.DarkBlue, PropertyType.LightBlue, PropertyType.Red, PropertyType.Railroad, PropertyType.Yellow, PropertyType.Orange, PropertyType.Brown, PropertyType.Purple, PropertyType.Utility]);
+        let darkBlueAndGreen = new Card("Rent", "", 1, CardType.Rent, [PropertyType.DarkBlue, PropertyType.Green]);
+        let lightBlueAndBrown = new Card("Rent", "", 1, CardType.Rent, [PropertyType.LightBlue, PropertyType.Brown]);
+        let purpleAndOrange = new Card("Rent", "", 1, CardType.Rent, [PropertyType.Purple, PropertyType.Orange]);
+        let railroadAndUtility = new Card("Rent", "", 1, CardType.Rent, [PropertyType.Railroad, PropertyType.Utility]);
+        let redAndYellow = new Card("Rent", "", 1, CardType.Rent, [PropertyType.Red, PropertyType.Yellow]);
         var i;
         for (i = 0; i < 2; i++) {
             this.rentCards.push(purpleAndOrange);
@@ -162,12 +158,12 @@ export class Deck {
     }
 
     initializeMoneyCards() {
-        let oneM = new MoneyCard("1M", 1);
-        let twoM = new MoneyCard("2M", 2);
-        let threeM = new MoneyCard("3M", 3);
-        let fourM = new MoneyCard("4M", 4);
-        let fiveM = new MoneyCard("5M", 5);
-        let tenM = new MoneyCard("10M", 10);
+        let oneM = new Card("1M", "", 1, CardType.Money, []);
+        let twoM = new Card("2M", "", 2, CardType.Money, []);
+        let threeM = new Card("3M", "", 3, CardType.Money, []);
+        let fourM = new Card("4M", "", 4, CardType.Money, []);
+        let fiveM = new Card("5M", "", 5, CardType.Money, []);
+        let tenM = new Card("10M", "", 10, CardType.Money, []);
         var i;
         this.moneyCards.push(tenM);
         for (i = 0; i < 2; i++) {

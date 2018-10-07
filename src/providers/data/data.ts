@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/catch';
 import { Player } from '../../app/models/Player';
+import { SocketProvider } from '../socket/socket';
 
 @Injectable()
 export class DataProvider {
@@ -12,7 +13,7 @@ export class DataProvider {
     this.player = new Player("", "", 0);
   }
 
-  setPlayer(firstName:string, lastName:string) {
+  setPlayer(firstName:string, lastName:string, socketProvider: SocketProvider) {
     console.log("[data.ts]: Saving user data: " + firstName + " " + lastName);
     this.player.firstName = firstName;
     this.player.lastName = lastName;

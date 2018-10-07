@@ -32,7 +32,8 @@ export class WildcardPopover {
 
     takeAction(type) {
         this.player.addActiveCard(this.card, type);
-        this.socket.emit('property-card', {card: this.card, player: this.player});
+        this.socket.emit('wildcard-card', {card: this.card, player: this.player, propertyChosen: type});
+        this.player.turnCount++;
         this.viewCtrl.dismiss();
     }
 }

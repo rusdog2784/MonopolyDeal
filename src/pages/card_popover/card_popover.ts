@@ -1,15 +1,11 @@
 import { Component } from '@angular/core';
 import { NavParams, ViewController, PopoverController } from 'ionic-angular';
 //import { CardOptions } from '../../app/models/CardOptions';
-import { ActionCard } from '../../app/models/ActionCard';
-import { PropertyCard } from '../../app/models/PropertyCard';
 import { Card } from '../../app/models/Card';
 import { Player } from '../../app/models/Player';
-import { MoneyCard } from '../../app/models/MoneyCard';
-import { Wildcard } from '../../app/models/Wildcard';
-import { RentCard } from '../../app/models/RentCard';
 import { WildcardPopover } from '../wildcard_popover/wildcard_popover';
 import { SocketProvider } from '../../providers/socket/socket';
+import { CardType } from '../../app/models/CardType';
 
 @Component({
     template: `
@@ -53,17 +49,20 @@ export class CardPopover {
                 index = this.player.hand.indexOf(this.card);
                 this.player.hand.splice(index, 1);
                 console.log(this.card);
-                if (this.card instanceof ActionCard || this.card instanceof RentCard) {
+                if (this.card.cardType == CardType.Action) {
                     this.playedCards.push(this.card);
                     this.socketProvider.emit('action-card', { card: this.card, player: this.player });
-                } else if (this.card instanceof PropertyCard) {
-                    this.player.addActiveCard(this.card, this.card.type);
+                } else if (this.card.cardType == CardType.Rent) {
+                    this.playedCards.push(this.card);
+                    this.socketProvider.emit('rent-card', { card: this.card, player: this.player });
+                } else if (this.card.cardType == CardType.Property) {
+                    this.player.addActiveCard(this.card, this.card.propertyTypes[0]);
                     this.socketProvider.emit('property-card', { card: this.card, player: this.player });
-                } else if (this.card instanceof Wildcard) {
+                } else if (this.card.cardType == CardType.Wildcard) {
                     this.viewCtrl.dismiss();
-                    this.presentCardOptions(this.card.types);
+                    this.presentCardOptions(this.card.propertyTypes);
                     return;
-                } else if (this.card instanceof MoneyCard) {
+                } else if (this.card.cardType == CardType.Money) {
                     let cardValue = this.card.value;
                     this.player.value += cardValue;
                     this.player.moneyCards.push(this.card);

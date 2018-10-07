@@ -1,10 +1,7 @@
 import { Card } from "./Card";
-import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
-import { PropertyCard } from "./PropertyCard";
-import { Wildcard } from "./Wildcard";
-import { PropertyType } from "./PropertyType";
 
 export class Player {
+    id: string;
     firstName: string;
     lastName: string;
     value: number;
@@ -12,8 +9,10 @@ export class Player {
     moneyCards: Card[];
     activeCards: any;
     turnCount: number;
-
+    myTurn: boolean;
+    
     constructor(firstName: string, lastName: string, value: number) {
+        this.id = this.getRandomID();
         this.firstName = firstName;
         this.lastName = lastName;
         this.value = value;
@@ -21,15 +20,27 @@ export class Player {
         this.moneyCards = [];
         this.activeCards = {};
         this.turnCount = 0;
+        this.myTurn = false;
     }
 
-    isTurnOver() {
-        if (this.turnCount >= 3) {
-            this.turnCount = 0;
+    getRandomID() {
+        var randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+        return randLetter + Date.now();
+    }
+
+    canPlay() {
+        if (this.isMyTurn() && !this.outOfMoves()) {
             return true;
-        } else {
-            return false;
         }
+        return false;
+    }
+
+    isMyTurn() {
+        return this.myTurn;
+    }
+
+    outOfMoves() {
+        return this.turnCount == 3;
     }
 
     organizeMoneyCards() {
@@ -54,5 +65,4 @@ export class Player {
         }
         return cards;
     }
-
 }

@@ -6,7 +6,7 @@ import { Card } from '../../app/models/Card';
 import { Player } from '../../app/models/Player';
 import { CardPopover } from '../card_popover/card_popover';
 import { SocketProvider } from '../../providers/socket/socket';
-import { ActionCard } from '../../app/models/ActionCard';
+import { CardType } from '../../app/models/CardType';
 
 @Component({
   selector: 'page-game',
@@ -17,13 +17,11 @@ export class GamePage {
     mainPlayer: Player;
     playedCards: Card[];
     opponents: Player[];
-    myTurn: boolean;
 
     constructor(public navCtrl: NavController, public alertCtrl: AlertController, public popoverCtrl: PopoverController, public socketProvider: SocketProvider, private navParams: NavParams) {
         this.opponents = [];
-        this.playedCards = [new Card('', 0)];
+        this.playedCards = [new Card('', '', 0, CardType.None, [])];
         this.mainPlayer = this.navParams.get('player');
-        this.myTurn = false;
         this.setupGame();
     }
 
@@ -58,6 +56,12 @@ export class GamePage {
             this.handleActionCardPlayed(card, player);
         });
 
+        this.socketProvider.subscribeTo('rent-card-played').subscribe(data => {
+            let card: Card = data['card'];
+            let player: Player = data['player'];
+            this.handleRentCardPlayed(card, player);
+        })
+
         this.socketProvider.subscribeTo('property-card-played').subscribe(data => {
             let card: Card = data['card'];
             let player: Player = data['player'];
@@ -72,15 +76,30 @@ export class GamePage {
     }
 
     handlePlayers(players) {
+        // for (let player of players) {
+        //     if (player.firstName != this.mainPlayer.firstName || player.lastName != this.mainPlayer.lastName) {
+        //         if (this.opponents.length <= 0) {
+        //             console.log("New player: " + player.firstName + " " + player.lastName);
+        //             this.opponents.push(player);
+        //         } else {
+        //             for (let opponent of this.opponents) {
+        //                 if (opponent.firstName != player.firstName || opponent.lastName != player.lastName) {
+        //                     console.log("New player: " + player.firstName + " " + player.lastName);
+        //                     this.opponents.push(player);
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
         for (let player of players) {
-            if (player.firstName != this.mainPlayer.firstName || player.lastName != this.mainPlayer.lastName) {
+            if (player.id != this.mainPlayer.id) {
                 if (this.opponents.length <= 0) {
-                    console.log("New player: " + player.firstName + " " + player.lastName);
+                    console.log("New player: " + player.firstName + " " + player.lastName + " (" + player.id + ")");
                     this.opponents.push(player);
                 } else {
                     for (let opponent of this.opponents) {
-                        if (opponent.firstName != player.firstName || opponent.lastName != player.lastName) {
-                            console.log("New player: " + player.firstName + " " + player.lastName);
+                        if (opponent.id != player.id) {
+                            console.log("New player: " + player.firstName + " " + player.lastName + " (" + player.id + ")");
                             this.opponents.push(player);
                         }
                     }
@@ -95,21 +114,30 @@ export class GamePage {
     }
 
     handleMyTurn() {
-        this.myTurn = true;
+        this.mainPlayer.myTurn = true;
         this.pullCards(2);
         this.displayYourTurn();
     }
 
     handleActionCardPlayed(card, player) {
-        console.log("Action card (" + card.title + ") played by: " + player.firstName + " " + player.lastName);
+        console.log("Action card (" + card.title + ") played by: " + player.firstName + " " + player.lastName + " (" + player.id + ")");
+    }
+
+    handleRentCardPlayed(card, player) {
+        console.log("Rent card (" + card.title + ") played by: " + player.firstName + " " + player.lastName + " (" + player.id + ")");
     }
 
     handlePropertyCardPlayed(card, player) {
-        console.log("Property card (" + card.title + ") played by: " + player.firstName + " " + player.lastName);
+        console.log("Property card (" + card.title + ") played by: " + player.firstName + " " + player.lastName + " (" + player.id + ")");
     }
 
     handleMoneyCardPlayed(card, player) {
-        console.log("Money card (" + card.title + ") played by: " + player.firstName + " " + player.lastName);
+        console.log("Money card (" + card.title + ") played by: " + player.firstName + " " + player.lastName + " (" + player.id + ")");
+        for (var i = 0; i < this.opponents.length; i++) {
+            if (this.opponents[i].id == player.id) {
+                this.opponents[i].value += card.value;
+            }
+        }
     }
 
     createDeck() {
@@ -119,7 +147,7 @@ export class GamePage {
     }
 
     presentCardOptions(ev, card: Card) {
-        if (this.myTurn) {
+        if (this.mainPlayer.canPlay()) {
             console.log("Player touched card: " + card.title);
             let popover = this.popoverCtrl.create(CardPopover, {
                 playedCards: this.playedCards,
@@ -131,7 +159,11 @@ export class GamePage {
                 ev: ev
             });
         } else {
-            this.displayNotYourTurn();
+            if (this.mainPlayer.outOfMoves()) {
+                this.displayOutOfMoves();
+            } else {
+                this.displayNotYourTurn();
+            }
         }
     }
 
@@ -148,7 +180,7 @@ export class GamePage {
     endTurn() {
         if (this.mainPlayer.hand.length > 7) {
             this.displayTooManyCards();
-        } else if (this.myTurn == false) {
+        } else if (this.mainPlayer.myTurn == false) {
             this.displayNotYourTurn();
         } else {
             this.displayEndYourTurn();
@@ -158,7 +190,16 @@ export class GamePage {
     displayNotYourTurn() {
         const alert = this.alertCtrl.create({
             title: "Sorry",
-            subTitle: "It's not currently your turn.",
+            subTitle: "It's not currently your turn",
+            buttons: ['Ok']
+        });
+        alert.present();
+    }
+
+    displayOutOfMoves() {
+        const alert = this.alertCtrl.create({
+            title: "Sorry",
+            subTitle: "You have played 3 cards. Please end your turn.",
             buttons: ['Ok']
         });
         alert.present();
@@ -181,7 +222,8 @@ export class GamePage {
                     text: 'Ok',
                     handler: () => {
                         alert.dismiss().then(() => { 
-                            this.myTurn = false;
+                            this.mainPlayer.myTurn = false;
+                            this.mainPlayer.turnCount = 0;
                             this.socketProvider.emit('end-turn', { player: this.mainPlayer });
                         });
                         return false;
