@@ -2,7 +2,6 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/catch';
 import { Player } from '../../app/models/Player';
-import { SocketProvider } from '../socket/socket';
 
 @Injectable()
 export class DataProvider {

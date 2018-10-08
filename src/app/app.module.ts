@@ -10,7 +10,7 @@ import { CardPopover } from '../pages/card_popover/card_popover';
 import { WildcardPopover } from '../pages/wildcard_popover/wildcard_popover';
 
 import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
-const config: SocketIoConfig = { url: 'http://localhost:9000', options: {} };
+const config: SocketIoConfig = { url: 'http://monopoly-deal.herokuapp.com/', options: {} };
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
