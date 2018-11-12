@@ -10,6 +10,7 @@ export class Player {
     activeCards: any;
     turnCount: number;
     myTurn: boolean;
+    printCards: Card[];
     
     constructor(firstName: string, lastName: string, value: number) {
         this.id = this.getRandomID();
@@ -21,6 +22,7 @@ export class Player {
         this.activeCards = {};
         this.turnCount = 0;
         this.myTurn = false;
+        this.printCards = [];
     }
 
     getRandomID() {
@@ -43,6 +45,12 @@ export class Player {
         return this.turnCount == 3;
     }
 
+    addMoneyCard(card) {
+        this.value += card.value;
+        this.moneyCards.push(card);
+        this.organizeMoneyCards;
+    }
+
     organizeMoneyCards() {
         if (this.moneyCards.length <= 1) {
             return;
@@ -56,13 +64,17 @@ export class Player {
         } else {
             this.activeCards[type] = [card];
         }
+        this.organizeActiveCards();
     }
 
-    getActiveCards() {
+    organizeActiveCards() {
+        if (this.activeCards.length <= 1) {
+            return;
+        }
         var cards = [];
         for (let key in this.activeCards) {
             cards.push(this.activeCards[key]);
         }
-        return cards;
+        this.printCards = cards;
     }
 }

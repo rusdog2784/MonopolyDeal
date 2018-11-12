@@ -1,6 +1,7 @@
 import { Card } from "./Card";
 import { PropertyType } from "./PropertyType";
 import { CardType } from "./CardType";
+import { ActionCardTitles } from './ActionCardTitles';
 
 export class Deck {
     cards: Card[];
@@ -26,16 +27,16 @@ export class Deck {
     }
 
     initializeActionCards() {
-        let dealBreaker = new Card("Deal Breaker", "Steals a complete set of properties from any player. (Includes any buildings) Play into center to use.", 5, CardType.Action, []);
-        let justSayNo = new Card("Just Say No", "Use any time when an action card is played against you. Play into center to use.", 4, CardType.Action, []);
-        let slyDeal = new Card("Sly Deal", "Steal a property from the player of your choice. (Cannot be part of a full set) Play into center to use.", 3, CardType.Action, []);
-        let forcedDeal = new Card("Forced Deal", "Swap any property with another player. (Cannot be part of a full set) Play into center to use.", 3, CardType.Action, []);
-        let debtCollector = new Card("Debt Collector", "Force any player to pay you 5M. Play into center to use.", 3, CardType.Action, []);
-        let itsMyBirthday = new Card("Its My Birthday", "All players give you 2M as a 'gift'. Play into center to use.", 2, CardType.Action, []);
-        let passGo = new Card("Pass Go", "Draw 2 extra cards. Play into center to use.", 1, CardType.Action, []);
-        let house = new Card("House", "Add onto any full set you own to add 3M to the rent value. (Except railroads and Utility)", 3, CardType.Action, []);
-        let hotel = new Card("Hotel", "Add onto any full set you own to add 4M to the rent value. (Except railroads and Utility)", 4, CardType.Action, []);
-        let doubleTheRent = new Card("Double The Rent", "Needs to played with a rent card. Play into center to use.", 1, CardType.Action, []);
+        let dealBreaker = new Card(ActionCardTitles.DealBreaker, "Steals a complete set of properties from any player. (Includes any buildings) Play into center to use.", 5, CardType.Action, []);
+        let justSayNo = new Card(ActionCardTitles.JustSayNo, "Use any time when an action card is played against you. Play into center to use.", 4, CardType.Action, []);
+        let slyDeal = new Card(ActionCardTitles.SlyDeal, "Steal a property from the player of your choice. (Cannot be part of a full set) Play into center to use.", 3, CardType.Action, []);
+        let forcedDeal = new Card(ActionCardTitles.ForcedDeal, "Swap any property with another player. (Cannot be part of a full set) Play into center to use.", 3, CardType.Action, []);
+        let debtCollector = new Card(ActionCardTitles.DebtCollector, "Force any player to pay you 5M. Play into center to use.", 3, CardType.Action, []);
+        let itsMyBirthday = new Card(ActionCardTitles.ItsMyBirthday, "All players give you 2M as a 'gift'. Play into center to use.", 2, CardType.Action, []);
+        let passGo = new Card(ActionCardTitles.PassGo, "Draw 2 extra cards. Play into center to use.", 1, CardType.Action, []);
+        let house = new Card(ActionCardTitles.House, "Add onto any full set you own to add 3M to the rent value. (Except railroads and Utility)", 3, CardType.Action, []);
+        let hotel = new Card(ActionCardTitles.Hotel, "Add onto any full set you own to add 4M to the rent value. (Except railroads and Utility)", 4, CardType.Action, []);
+        let doubleTheRent = new Card(ActionCardTitles.DoubleTheRent, "Needs to played with a rent card. Play into center to use.", 1, CardType.Action, []);
         var i;
         for (i = 0; i < 2; i++) {
             this.actionCards.push(dealBreaker);

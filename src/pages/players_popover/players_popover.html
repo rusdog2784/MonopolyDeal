@@ -1,0 +1,30 @@
+<ion-slides pager>
+
+    <ion-slide *ngFor="let opponent of opponents">
+        <div class="slide-content">
+            <div class="profile-info">
+                <img src="assets/imgs/logo.png" width="55px" height="55px">
+                <div class="player-name">{{opponent.firstName}} {{opponent.lastName}}</div>
+                <div class="player-worth">${{opponent.value}}M</div>
+            </div>
+            <div class="properties">
+                <h2>Properties:</h2>
+                <ul>
+                    <li *ngFor="let set of opponent.printCards">
+                        <img *ngFor="let card of set" src="{{card.imageLocation}}" width="52px" height="84px">
+                    </li>
+                </ul>
+            </div>
+            <div class="money">
+                <h2>Money:</h2>
+                <ul>
+                    <li *ngFor="let card of opponent.moneyCards">
+                        <!-- <p class="value">{{card.value}}M</p> -->
+                        <img src="{{card.imageLocation}}" width="52px" height="84px">
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </ion-slide>
+
+</ion-slides>

@@ -46,8 +46,9 @@ export class GamePage {
             this.pullCards(amount);
         });
 
-        this.socketProvider.subscribeTo('my-turn').subscribe(() => {
-            this.handleMyTurn();
+        this.socketProvider.subscribeTo('my-turn').subscribe(data => {
+            let updatedPlayer:Player = data['updatedPlayer'];
+            this.handleMyTurn(updatedPlayer);
         });
 
         this.socketProvider.subscribeTo('action-card-played').subscribe(data => {
@@ -76,21 +77,6 @@ export class GamePage {
     }
 
     handlePlayers(players) {
-        // for (let player of players) {
-        //     if (player.firstName != this.mainPlayer.firstName || player.lastName != this.mainPlayer.lastName) {
-        //         if (this.opponents.length <= 0) {
-        //             console.log("New player: " + player.firstName + " " + player.lastName);
-        //             this.opponents.push(player);
-        //         } else {
-        //             for (let opponent of this.opponents) {
-        //                 if (opponent.firstName != player.firstName || opponent.lastName != player.lastName) {
-        //                     console.log("New player: " + player.firstName + " " + player.lastName);
-        //                     this.opponents.push(player);
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
         for (let player of players) {
             if (player.id != this.mainPlayer.id) {
                 if (this.opponents.length <= 0) {
@@ -113,7 +99,15 @@ export class GamePage {
         this.deck = newDeck;
     }
 
-    handleMyTurn() {
+    handleMyTurn(updatedPlayer:Player) {
+        if (updatedPlayer != undefined) {
+            for (var i = 0; i < this.opponents.length; i++) {
+                if (this.opponents[i].id == updatedPlayer.id) {
+                    this.opponents[i] = updatedPlayer;
+                    break;
+                }
+            }
+        }
         this.mainPlayer.myTurn = true;
         this.pullCards(2);
         this.displayYourTurn();
@@ -153,7 +147,8 @@ export class GamePage {
                 playedCards: this.playedCards,
                 player: this.mainPlayer,
                 card: card,
-                event: ev
+                event: ev,
+                opponents: this.opponents
             });
             popover.present({
                 ev: ev

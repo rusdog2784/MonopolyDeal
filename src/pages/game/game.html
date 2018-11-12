@@ -38,7 +38,7 @@
     <div class="active-cards">
         <div class="properties">
             <ul>
-                <li *ngFor="let set of mainPlayer.getActiveCards()">
+                <li *ngFor="let set of mainPlayer.printCards">
                     <img *ngFor="let card of set" src="{{card.imageLocation}}" width="65px" height="105px">
                 </li>
             </ul>

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { NavParams, ViewController, PopoverController } from 'ionic-angular';
-//import { CardOptions } from '../../app/models/CardOptions';
 import { Card } from '../../app/models/Card';
 import { Player } from '../../app/models/Player';
 import { WildcardPopover } from '../wildcard_popover/wildcard_popover';
+import { PlayersPopover } from '../players_popover/players_popover';
 import { SocketProvider } from '../../providers/socket/socket';
 import { CardType } from '../../app/models/CardType';
 
@@ -27,9 +27,9 @@ export class CardPopover {
     player: Player;
     card: Card;
     event;
+    opponents: Player[];
 
     constructor(private navParams: NavParams, private viewCtrl: ViewController, public popoverCtrl: PopoverController, public socketProvider: SocketProvider) {
-
     }
 
     ngOnInit() {
@@ -38,6 +38,8 @@ export class CardPopover {
             this.player = this.navParams.data.player;
             this.card = this.navParams.data.card;
             this.event = this.navParams.data.event;
+            this.opponents = this.navParams.data.opponents;
+            console.log(this.opponents);
         }
     }
 
@@ -50,8 +52,9 @@ export class CardPopover {
                 this.player.hand.splice(index, 1);
                 console.log(this.card);
                 if (this.card.cardType == CardType.Action) {
-                    this.playedCards.push(this.card);
-                    this.socketProvider.emit('action-card', { card: this.card, player: this.player });
+                    this.presentPlayers();
+                    // this.playedCards.push(this.card);
+                    // this.socketProvider.emit('action-card', { card: this.card, player: this.player.id });
                 } else if (this.card.cardType == CardType.Rent) {
                     this.playedCards.push(this.card);
                     this.socketProvider.emit('rent-card', { card: this.card, player: this.player });
@@ -60,13 +63,14 @@ export class CardPopover {
                     this.socketProvider.emit('property-card', { card: this.card, player: this.player });
                 } else if (this.card.cardType == CardType.Wildcard) {
                     this.viewCtrl.dismiss();
-                    this.presentCardOptions(this.card.propertyTypes);
+                    this.presentWildcardOptions(this.card.propertyTypes);
                     return;
                 } else if (this.card.cardType == CardType.Money) {
-                    let cardValue = this.card.value;
-                    this.player.value += cardValue;
-                    this.player.moneyCards.push(this.card);
-                    this.player.organizeMoneyCards();
+                    this.player.addMoneyCard(this.card);
+                    // let cardValue = this.card.value;
+                    // this.player.value += cardValue;
+                    // this.player.moneyCards.push(this.card);
+                    // this.player.organizeMoneyCards();
                     this.socketProvider.emit('money-card', { card: this.card, player: this.player });
                 }
                 this.player.turnCount++;
@@ -94,7 +98,7 @@ export class CardPopover {
         this.viewCtrl.dismiss();
     }
 
-    presentCardOptions(types) {
+    presentWildcardOptions(types) {
         console.log("Wildcard popover...");
         console.log(this.player);
         console.log(this.card);
@@ -102,6 +106,16 @@ export class CardPopover {
             player: this.player,
             card: this.card,
             types: types
+        });
+        popover.present();
+    }
+
+    presentPlayers() {
+        console.log("View players popover...");
+        let popover = this.popoverCtrl.create(PlayersPopover, {
+            card: this.card,
+            player: this.player,
+            opponents: this.opponents
         });
         popover.present();
     }
