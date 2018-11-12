@@ -38,16 +38,15 @@
     <div class="active-cards">
         <div class="properties">
             <ul>
-                <li *ngFor="let set of mainPlayer.printCards">
+                <li *ngFor="let set of mainPlayer.printActiveCards">
                     <img *ngFor="let card of set" src="{{card.imageLocation}}" width="65px" height="105px">
                 </li>
             </ul>
         </div>
         <div class="money-cards">
             <ul>
-                <li *ngFor="let card of mainPlayer.moneyCards">
-                    <p class="value">{{card.value}}M</p>
-                    <img src="{{card.imageLocation}}" width="65px" height="105px">
+                <li *ngFor="let set of mainPlayer.printMoneyCards">
+                    <img *ngFor="let card of set" src="{{card.imageLocation}}" width="65px" height="105px">
                 </li>
             </ul>
         </div>

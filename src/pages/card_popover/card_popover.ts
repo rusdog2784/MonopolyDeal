@@ -67,22 +67,15 @@ export class CardPopover {
                     return;
                 } else if (this.card.cardType == CardType.Money) {
                     this.player.addMoneyCard(this.card);
-                    // let cardValue = this.card.value;
-                    // this.player.value += cardValue;
-                    // this.player.moneyCards.push(this.card);
-                    // this.player.organizeMoneyCards();
                     this.socketProvider.emit('money-card', { card: this.card, player: this.player });
                 }
                 this.player.turnCount++;
                 break;
             case 'MONETIZE':
                 console.log("Taking action: MONETIZE");
-                let cardValue = this.card.value;
-                this.player.value += cardValue;
-                this.player.moneyCards.push(this.card);
-                this.player.organizeMoneyCards();
                 index = this.player.hand.indexOf(this.card);
                 this.player.hand.splice(index, 1);
+                this.player.addMoneyCard(this.card);
                 this.socketProvider.emit('money-card', { card: this.card, player: this.player });
                 this.player.turnCount++;
                 break;

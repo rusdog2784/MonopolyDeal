@@ -1,6 +1,19 @@
 players-popover {
-    .slide-content {
+    .popover {
         width: 250px;
+        margin: 0 auto;
+        padding: 4px;
+    }
+
+    h1 {
+        font-size: 18px;
+    }
+
+    .slide-content {
+        margin-bottom: 30px;
+    }
+
+    button {
         margin: 0 auto;
     }
 

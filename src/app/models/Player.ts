@@ -6,11 +6,12 @@ export class Player {
     lastName: string;
     value: number;
     hand: Card[];
-    moneyCards: Card[];
+    moneyCards: any;
     activeCards: any;
     turnCount: number;
     myTurn: boolean;
-    printCards: Card[];
+    printMoneyCards: Card[];
+    printActiveCards: Card[];
     
     constructor(firstName: string, lastName: string, value: number) {
         this.id = this.getRandomID();
@@ -18,11 +19,12 @@ export class Player {
         this.lastName = lastName;
         this.value = value;
         this.hand = [];
-        this.moneyCards = [];
+        this.moneyCards = {};
         this.activeCards = {};
         this.turnCount = 0;
         this.myTurn = false;
-        this.printCards = [];
+        this.printMoneyCards = [];
+        this.printActiveCards = [];
     }
 
     getRandomID() {
@@ -47,15 +49,25 @@ export class Player {
 
     addMoneyCard(card) {
         this.value += card.value;
-        this.moneyCards.push(card);
-        this.organizeMoneyCards;
+        if (this.moneyCards[card.value]) {
+            this.moneyCards[card.value].push(card);
+        } else {
+            this.moneyCards[card.value] = [card];
+        }
+        this.organizeMoneyCards();
+        console.log("addMoneyCard:");
+        console.log(this.moneyCards);
     }
 
     organizeMoneyCards() {
         if (this.moneyCards.length <= 1) {
             return;
         }
-        this.moneyCards.sort(function(a, b) { return a.value - b.value; });
+        var cards = [];
+        for (let key in this.moneyCards) {
+            cards.push(this.moneyCards[key]);
+        }
+        this.printMoneyCards = cards;
     }
 
     addActiveCard(card, type) {
@@ -75,6 +87,6 @@ export class Player {
         for (let key in this.activeCards) {
             cards.push(this.activeCards[key]);
         }
-        this.printCards = cards;
+        this.printActiveCards = cards;
     }
 }

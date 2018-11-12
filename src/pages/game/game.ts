@@ -51,10 +51,16 @@ export class GamePage {
             this.handleMyTurn(updatedPlayer);
         });
 
-        this.socketProvider.subscribeTo('action-card-played').subscribe(data => {
+        this.socketProvider.subscribeTo('action-card-action-required').subscribe(data => {
             let card: Card = data['card'];
-            let player: Player = data['player'];
-            this.handleActionCardPlayed(card, player);
+            let from: Player = data['from'];
+            this.handleActionCardActionRequired(card, from);
+        });
+
+        this.socketProvider.subscribeTo('action-card-result').subscribe(data => {
+            let cards: Card[] = data['cards'];
+            let from: Player = data['from'];
+            this.handleActionCardResult(cards, from);
         });
 
         this.socketProvider.subscribeTo('rent-card-played').subscribe(data => {
@@ -113,8 +119,14 @@ export class GamePage {
         this.displayYourTurn();
     }
 
-    handleActionCardPlayed(card, player) {
-        console.log("Action card (" + card.title + ") played by: " + player.firstName + " " + player.lastName + " (" + player.id + ")");
+    handleActionCardActionRequired(card, from) {
+        console.log("Action card (" + card.title + ") played by: " + from.firstName + " " + from.lastName + " (" + from.id + ")");
+        this.displayActionCardPlayedAgainst(card, from)
+    }
+
+    handleActionCardResult(cards, from) {
+        console.log("Action card results: " + from.firstName + " " + from.lastName + " (" + from.id + ") gave you...");
+        console.log(cards);
     }
 
     handleRentCardPlayed(card, player) {
@@ -233,7 +245,26 @@ export class GamePage {
         const alert = this.alertCtrl.create({
             title: 'Whoops!',
             subTitle: 'You seem to have too many cards. Please discard some cards.',
-            buttons: ['OK']
+            buttons: ['Ok']
+        });
+        alert.present();
+    }
+
+    displayActionCardPlayedAgainst(card, player) {
+        const alert = this.alertCtrl.create({
+            title: card.title + " played by " + player.firstName + " " + player.lastName,
+            subTitle: 'Please take action.',
+            buttons: [
+                {
+                    text: "Ok",
+                    handler: () => {
+                        alert.dismiss().then(() => {
+                            this.socketProvider.emit('action-card-action-for', { cards: [], from: this.mainPlayer, to: player});
+                        });
+                        return false;
+                    }
+                }
+            ]
         });
         alert.present();
     }
