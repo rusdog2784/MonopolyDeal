@@ -8,6 +8,8 @@ import { ProfilePage } from '../pages/profile/profile';
 import { GamePage } from '../pages/game/game';
 import { CardPopover } from '../pages/card_popover/card_popover';
 import { WildcardPopover } from '../pages/wildcard_popover/wildcard_popover';
+import { PlayersPopover } from '../pages/players_popover/players_popover';
+import { OpponentActionsPopover } from '../pages/opponent_actions_popover/opponent_actions_popover';
 
 import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
 // const config: SocketIoConfig = { url: 'http://monopoly-deal.herokuapp.com/', options: {} };
@@ -18,7 +20,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { DataProvider } from '../providers/data/data';
 import { IonicStorageModule } from '@ionic/storage';
 import { SocketProvider } from '../providers/socket/socket';
-import { PlayersPopover } from '../pages/players_popover/players_popover';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { PlayersPopover } from '../pages/players_popover/players_popover';
     GamePage,
     CardPopover,
     WildcardPopover,
-    PlayersPopover
+    PlayersPopover,
+    OpponentActionsPopover
   ],
   imports: [
     BrowserModule,
@@ -44,7 +46,8 @@ import { PlayersPopover } from '../pages/players_popover/players_popover';
     GamePage,
     CardPopover,
     WildcardPopover,
-    PlayersPopover
+    PlayersPopover,
+    OpponentActionsPopover
   ],
   providers: [
     StatusBar,

@@ -1,4 +1,11 @@
 page-game {
+    .headlines {
+        font-size: 10px;
+        text-align: center;
+        margin-top: 0px;
+        color: dimgray;
+    }
+
     .online-players {
         width: 100%;
         height: 100px;
@@ -76,6 +83,9 @@ page-game {
 
     .active-cards li {
         display: flex;
+    }
+
+    .active-cards .money-cards li {
         margin-bottom: 5px;
         float: right;
     }

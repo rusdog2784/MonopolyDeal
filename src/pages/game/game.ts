@@ -5,6 +5,7 @@ import { Deck } from '../../app/models/Deck';
 import { Card } from '../../app/models/Card';
 import { Player } from '../../app/models/Player';
 import { CardPopover } from '../card_popover/card_popover';
+import { OpponentActionsPopover } from '../opponent_actions_popover/opponent_actions_popover';
 import { SocketProvider } from '../../providers/socket/socket';
 import { CardType } from '../../app/models/CardType';
 
@@ -17,9 +18,11 @@ export class GamePage {
     mainPlayer: Player;
     playedCards: Card[];
     opponents: Player[];
+    opponents_actions: String[];
 
     constructor(public navCtrl: NavController, public alertCtrl: AlertController, public popoverCtrl: PopoverController, public socketProvider: SocketProvider, private navParams: NavParams) {
         this.opponents = [];
+        this.opponents_actions = [];
         this.playedCards = [new Card('', '', 0, CardType.None, [])];
         this.mainPlayer = this.navParams.get('player');
         this.setupGame();
@@ -42,7 +45,6 @@ export class GamePage {
 
         this.socketProvider.subscribeTo('initial-cards').subscribe(data => {
             let amount: number = data['amount'];
-            //let player: Player = data['player'];
             this.pullCards(amount);
         });
 
@@ -86,12 +88,16 @@ export class GamePage {
         for (let player of players) {
             if (player.id != this.mainPlayer.id) {
                 if (this.opponents.length <= 0) {
-                    console.log("New player: " + player.firstName + " " + player.lastName + " (" + player.id + ")");
+                    let action_taken:String = player.firstName + " " + player.lastName + " entered the game.";
+                    this.opponents_actions.push(action_taken);
+                    console.log(action_taken);
                     this.opponents.push(player);
                 } else {
                     for (let opponent of this.opponents) {
                         if (opponent.id != player.id) {
-                            console.log("New player: " + player.firstName + " " + player.lastName + " (" + player.id + ")");
+                            let action_taken:String = player.firstName + " " + player.lastName + " entered the game.";
+                            this.opponents_actions.push(action_taken);
+                            console.log(action_taken);
                             this.opponents.push(player);
                         }
                     }
@@ -109,6 +115,8 @@ export class GamePage {
         if (updatedPlayer != undefined) {
             for (var i = 0; i < this.opponents.length; i++) {
                 if (this.opponents[i].id == updatedPlayer.id) {
+                    let action_taken:String = updatedPlayer.firstName + " " + updatedPlayer.lastName + " ended their turn.";
+                    this.opponents_actions.push(action_taken);
                     this.opponents[i] = updatedPlayer;
                     break;
                 }
@@ -120,7 +128,9 @@ export class GamePage {
     }
 
     handleActionCardActionRequired(card, from) {
-        console.log("Action card (" + card.title + ") played by: " + from.firstName + " " + from.lastName + " (" + from.id + ")");
+        let action_taken:String = from.firstName + " " + from.lastName + " played the " + card.title + " action card.";
+        this.opponents_actions.push(action_taken);
+        console.log(action_taken);
         this.displayActionCardPlayedAgainst(card, from)
     }
 
@@ -130,15 +140,21 @@ export class GamePage {
     }
 
     handleRentCardPlayed(card, player) {
-        console.log("Rent card (" + card.title + ") played by: " + player.firstName + " " + player.lastName + " (" + player.id + ")");
+        let action_taken:String = player.firstName + " " + player.lastName + " played the " + card.title + " rent card.";
+        this.opponents_actions.push(action_taken);
+        console.log(action_taken);
     }
 
     handlePropertyCardPlayed(card, player) {
-        console.log("Property card (" + card.title + ") played by: " + player.firstName + " " + player.lastName + " (" + player.id + ")");
+        let action_taken:String = player.firstName + " " + player.lastName + " played the " + card.title + " property card.";
+        this.opponents_actions.push(action_taken);
+        console.log(action_taken);
     }
 
     handleMoneyCardPlayed(card, player) {
-        console.log("Money card (" + card.title + ") played by: " + player.firstName + " " + player.lastName + " (" + player.id + ")");
+        let action_taken:String = player.firstName + " " + player.lastName + " played the " + card.title + " money card.";
+        this.opponents_actions.push(action_taken);
+        console.log(action_taken);
         for (var i = 0; i < this.opponents.length; i++) {
             if (this.opponents[i].id == player.id) {
                 this.opponents[i].value += card.value;
@@ -172,6 +188,13 @@ export class GamePage {
                 this.displayNotYourTurn();
             }
         }
+    }
+
+    presentOpponentActionsTaken(ev) {
+        let popover = this.popoverCtrl.create(OpponentActionsPopover, {
+            opponents_actions: this.opponents_actions
+        });
+        popover.present();
     }
 
     pullCards(amount:number) {
